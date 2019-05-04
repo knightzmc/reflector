@@ -65,12 +65,8 @@ public abstract class AbstractProperty implements Property {
 
     @Override
     public Object getValue() {
-        if (source == null) {
-            return null;
-        }
-        return getValue(source);
+        return source == null ? null : getValue(source);
     }
-
 
     @Override
     public Set<Property> getProperties() {

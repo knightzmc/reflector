@@ -12,6 +12,7 @@ import me.bristermitten.reflector.generator.searcher.Searcher;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Optional;
 import java.util.Set;
 
 @SuppressWarnings("ALL")
@@ -106,26 +107,24 @@ public class ReflectionHelper {
         return method;
     }
 
-    public Method getGetterFor(Field f) {
-        //normally this would be slow but caching is in place
+    public Optional<Method> getGetterFor(Field f) throws RuntimeException {
         Set<Method> allMethods = methodSearcher.search(f.getDeclaringClass());
         for (Method method : allMethods) {
             if (matcher.isGetter(method, f)) {
-                return method;
+                return Optional.of(method);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
-    public Method getSetterFor(Field f) {
-        //normally this would be slow but caching is in place
+    public Optional<Method> getSetterFor(Field f) throws RuntimeException {
         Set<Method> allMethods = methodSearcher.search(f.getDeclaringClass());
         for (Method method : allMethods) {
             if (matcher.isSetter(method, f)) {
-                return method;
+                return Optional.of(method);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     /**

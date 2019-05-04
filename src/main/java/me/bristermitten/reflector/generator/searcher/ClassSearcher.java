@@ -17,13 +17,14 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Comparator;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 
 public class ClassSearcher {
     private final Options options;
     private final Searcher fieldSearcher;
-    private final LoadingCache<Field, Method> getterCache, setterCache;
+    private final LoadingCache<Field, Optional<Method>> getterCache, setterCache;
     private final ReflectionHelper reflectionHelper;
     private final PropertyFactory propertyFactory;
     private final ClassStructureFactory structureFactory;
@@ -54,10 +55,11 @@ public class ClassSearcher {
         Set<Property> properties = new TreeSet<>(Comparator.comparing(Property::getName));
 
         for (Field field : fields) {
-            Property property = getProperty(field,
-                    getterCache.getUnchecked(field),
-                    setterCache.getUnchecked(field));
-            properties.add(property);
+            Optional<Method> getter = getterCache.getUnchecked(field); //workaround as guava's caches don't allow null values
+            Optional<Method> setter = setterCache.getUnchecked(field);
+            Property property = getProperty(field, getter.orElse(null), setter.orElse(null));
+            if (property != null)
+                properties.add(property);
         }
         return structureFactory.createStructure(clazz, ImmutableSet.copyOf(properties));
     }
