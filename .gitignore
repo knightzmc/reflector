@@ -44,7 +44,6 @@ lib/
 .mtj.tmp/
 
 # Package Files #
-*.jar
 *.war
 *.nar
 *.ear
@@ -65,3 +64,4 @@ gen
 .gradle/
 src/main/resources/
 src/test/
+build/
