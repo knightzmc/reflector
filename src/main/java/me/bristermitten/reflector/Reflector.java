@@ -10,6 +10,9 @@ import me.bristermitten.reflector.generator.searcher.ClassSearcher;
 import me.bristermitten.reflector.generator.searcher.ClassStructureFactory;
 import me.bristermitten.reflector.inject.ReflectorBindingModule;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class Reflector {
 
     @Inject
@@ -32,6 +35,14 @@ public class Reflector {
 
     public ClassStructure getStructure(Class clazz) {
         return searcher.search(clazz);
+    }
+
+    public Set<ClassStructure> getStructures(Class... classes) {
+        Set<ClassStructure> set = new HashSet<>();
+        for (Class c : classes) {
+            set.add(getStructure(c));
+        }
+        return set;
     }
 
     public ValuedClassStructure assignValues(ClassStructure structure, Object valuesFrom) {
