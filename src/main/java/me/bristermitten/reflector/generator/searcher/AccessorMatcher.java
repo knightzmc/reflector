@@ -1,7 +1,8 @@
 package me.bristermitten.reflector.generator.searcher;
 
-import me.bristermitten.jui.config.ConfigurableInterface;
-import me.bristermitten.jui.generator.property.Property;
+
+import me.bristermitten.reflector.config.ConfigurableInterface;
+import me.bristermitten.reflector.generator.property.Property;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

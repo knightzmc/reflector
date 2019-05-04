@@ -1,7 +1,7 @@
 package me.bristermitten.reflector.generator.searcher;
 
 import com.google.inject.Inject;
-import me.bristermitten.jui.config.Options;
+import me.bristermitten.reflector.config.Options;
 
 import java.lang.reflect.Method;
 import java.util.Collections;

@@ -2,7 +2,7 @@ package me.bristermitten.reflector.generator.property.setter;
 
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
-import me.bristermitten.jui.helper.ReflectionHelper;
+import me.bristermitten.reflector.helper.ReflectionHelper;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Method;
@@ -15,7 +15,7 @@ import java.lang.reflect.Method;
  *
  * @param <V>
  */
-public class SetterSetter<V> implements Setter<V> {
+public class SetterSetter<V> implements Setter {
     private final Method setter;
     private final Object setOn;
     private final ReflectionHelper helper;
@@ -30,7 +30,7 @@ public class SetterSetter<V> implements Setter<V> {
     }
 
     @Override
-    public V set(V newValue) {
+    public Object set(Object newValue) {
         return helper.invokeMethod(setter, setOn, newValue);
     }
 }

@@ -3,10 +3,10 @@ package me.bristermitten.reflector.generator.property;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import lombok.ToString;
-import me.bristermitten.jui.JUI;
-import me.bristermitten.jui.generator.property.setter.Setter;
-import me.bristermitten.jui.generator.property.setter.SetterFactory;
-import me.bristermitten.jui.helper.ReflectionHelper;
+import me.bristermitten.reflector.Reflector;
+import me.bristermitten.reflector.generator.property.setter.Setter;
+import me.bristermitten.reflector.generator.property.setter.SetterFactory;
+import me.bristermitten.reflector.helper.ReflectionHelper;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
@@ -18,12 +18,12 @@ public class FullAccessorProperty extends AbstractProperty {
     @Inject
     public FullAccessorProperty(ReflectionHelper helper,
                                 SetterFactory factory,
-                                JUI jui,
+                                Reflector reflector,
                                 @Assisted String name,
                                 @Assisted Field field,
                                 @Assisted("getter") @NotNull Method getter,
                                 @Assisted("setter") @NotNull Method setter) {
-        super(helper, factory, jui, name, field, getter, setter);
+        super(helper, factory, reflector, name, field, getter, setter);
     }
 
     @Override

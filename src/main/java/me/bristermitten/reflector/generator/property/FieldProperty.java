@@ -3,10 +3,10 @@ package me.bristermitten.reflector.generator.property;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import lombok.ToString;
-import me.bristermitten.jui.JUI;
-import me.bristermitten.jui.generator.property.setter.Setter;
-import me.bristermitten.jui.generator.property.setter.SetterFactory;
-import me.bristermitten.jui.helper.ReflectionHelper;
+import me.bristermitten.reflector.Reflector;
+import me.bristermitten.reflector.generator.property.setter.Setter;
+import me.bristermitten.reflector.generator.property.setter.SetterFactory;
+import me.bristermitten.reflector.helper.ReflectionHelper;
 
 import java.lang.reflect.Field;
 
@@ -16,10 +16,10 @@ public class FieldProperty extends AbstractProperty {
     @Inject
     public FieldProperty(ReflectionHelper helper,
                          SetterFactory factory,
-                         JUI jui,
+                         Reflector reflector,
                          @Assisted String name,
                          @Assisted Field field) {
-        super(helper, factory, jui, name, field, null, null);
+        super(helper, factory, reflector, name, field, null, null);
     }
 
     @Override
