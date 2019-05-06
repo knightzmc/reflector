@@ -29,6 +29,7 @@ public class Reflector {
         this(new ReflectorBindingModule(options).createInjector());
     }
 
+    @Inject
     private Reflector(Injector injector) {
         injector.injectMembers(this);
     }
