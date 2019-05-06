@@ -1,11 +1,11 @@
-package me.bristermitten.reflector.generator.property;
+package me.bristermitten.reflector.property;
 
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import lombok.ToString;
 import me.bristermitten.reflector.Reflector;
-import me.bristermitten.reflector.generator.property.setter.Setter;
-import me.bristermitten.reflector.generator.property.setter.SetterFactory;
+import me.bristermitten.reflector.property.setter.Setter;
+import me.bristermitten.reflector.property.setter.SetterFactory;
 import me.bristermitten.reflector.helper.ReflectionHelper;
 
 import java.lang.reflect.Field;

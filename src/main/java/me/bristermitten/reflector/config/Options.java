@@ -3,9 +3,9 @@ package me.bristermitten.reflector.config;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.Accessors;
-import me.bristermitten.reflector.generator.searcher.AccessorMatcher;
-import me.bristermitten.reflector.generator.searcher.NameDecider;
-import me.bristermitten.reflector.generator.searcher.Searcher;
+import me.bristermitten.reflector.searcher.AccessorMatcher;
+import me.bristermitten.reflector.searcher.NameDecider;
+import me.bristermitten.reflector.searcher.Searcher;
 
 /**
  * Class for configuring and storing options and implementations for JUI.

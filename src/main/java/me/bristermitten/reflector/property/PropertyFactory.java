@@ -1,4 +1,4 @@
-package me.bristermitten.reflector.generator.property;
+package me.bristermitten.reflector.property;
 
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.name.Named;

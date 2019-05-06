@@ -3,11 +3,11 @@ package me.bristermitten.reflector;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import me.bristermitten.reflector.config.Options;
-import me.bristermitten.reflector.generator.property.structure.ClassStructure;
-import me.bristermitten.reflector.generator.property.structure.Null;
-import me.bristermitten.reflector.generator.property.valued.ValuedClassStructure;
-import me.bristermitten.reflector.generator.searcher.ClassSearcher;
-import me.bristermitten.reflector.generator.searcher.ClassStructureFactory;
+import me.bristermitten.reflector.property.structure.ClassStructure;
+import me.bristermitten.reflector.property.structure.Null;
+import me.bristermitten.reflector.property.valued.ValuedClassStructure;
+import me.bristermitten.reflector.searcher.ClassSearcher;
+import me.bristermitten.reflector.searcher.ClassStructureFactory;
 import me.bristermitten.reflector.inject.ReflectorBindingModule;
 
 import java.util.HashSet;

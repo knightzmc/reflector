@@ -1,4 +1,4 @@
-package me.bristermitten.reflector.generator.searcher;
+package me.bristermitten.reflector.searcher;
 
 import com.google.inject.Inject;
 import me.bristermitten.reflector.config.Options;

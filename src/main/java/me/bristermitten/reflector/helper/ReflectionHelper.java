@@ -6,8 +6,8 @@ import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
-import me.bristermitten.reflector.generator.searcher.AccessorMatcher;
-import me.bristermitten.reflector.generator.searcher.Searcher;
+import me.bristermitten.reflector.searcher.AccessorMatcher;
+import me.bristermitten.reflector.searcher.Searcher;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;

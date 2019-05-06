@@ -1,4 +1,4 @@
-package me.bristermitten.reflector.generator.searcher;
+package me.bristermitten.reflector.searcher;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -8,9 +8,9 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import me.bristermitten.reflector.annotation.ReflectorExpose;
 import me.bristermitten.reflector.config.Options;
-import me.bristermitten.reflector.generator.property.Property;
-import me.bristermitten.reflector.generator.property.PropertyFactory;
-import me.bristermitten.reflector.generator.property.structure.ClassStructure;
+import me.bristermitten.reflector.property.Property;
+import me.bristermitten.reflector.property.PropertyFactory;
+import me.bristermitten.reflector.property.structure.ClassStructure;
 import me.bristermitten.reflector.helper.ReflectionHelper;
 
 import java.lang.reflect.Field;
