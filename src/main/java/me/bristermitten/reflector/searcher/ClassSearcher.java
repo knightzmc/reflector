@@ -5,6 +5,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 import me.bristermitten.reflector.annotation.ReflectorExpose;
 import me.bristermitten.reflector.config.Options;
@@ -21,6 +22,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 
+@Singleton
 public class ClassSearcher {
     private final Options options;
     private final Searcher fieldSearcher;
