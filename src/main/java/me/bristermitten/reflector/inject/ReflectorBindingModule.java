@@ -4,6 +4,7 @@ import com.google.inject.Module;
 import com.google.inject.*;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.name.Names;
+import me.bristermitten.reflector.Reflector;
 import me.bristermitten.reflector.config.Options;
 import me.bristermitten.reflector.property.*;
 import me.bristermitten.reflector.property.setter.FieldSetter;
@@ -17,9 +18,6 @@ public class ReflectorBindingModule extends AbstractModule {
 
     private Module customInjectModule;
 
-    public ReflectorBindingModule() {
-        this(Options.DEFAULT);
-    }
 
     public ReflectorBindingModule(Options options) {
         this(options, null);
@@ -69,6 +67,6 @@ public class ReflectorBindingModule extends AbstractModule {
     }
 
     public Injector createInjector() {
-        return Guice.createInjector(Stage.PRODUCTION, this);
+        return Guice.createInjector(this);
     }
 }
