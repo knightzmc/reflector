@@ -8,10 +8,10 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import me.bristermitten.reflector.annotation.ReflectorExpose;
 import me.bristermitten.reflector.config.Options;
+import me.bristermitten.reflector.helper.ReflectionHelper;
 import me.bristermitten.reflector.property.Property;
 import me.bristermitten.reflector.property.PropertyFactory;
 import me.bristermitten.reflector.property.structure.ClassStructure;
-import me.bristermitten.reflector.helper.ReflectionHelper;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -24,8 +24,8 @@ import java.util.TreeSet;
 public class ClassSearcher {
     private final Options options;
     private final Searcher fieldSearcher;
+    private final LoadingCache<Class, ClassStructure> structureCache;
     private final LoadingCache<Field, Optional<Method>> getterCache, setterCache;
-    private final ReflectionHelper reflectionHelper;
     private final PropertyFactory propertyFactory;
     private final ClassStructureFactory structureFactory;
     private final NameDecider decider;
@@ -40,17 +40,21 @@ public class ClassSearcher {
             NameDecider decider) {
         this.options = options;
         this.fieldSearcher = fieldSearcher;
-        this.reflectionHelper = reflectionHelper;
         this.propertyFactory = propertyFactory;
         this.structureFactory = structureFactory;
         this.decider = decider;
 
         CacheBuilder cacheBuilder = CacheBuilder.newBuilder();
+        structureCache = cacheBuilder.build(CacheLoader.from(this::search0));
         getterCache = cacheBuilder.build(CacheLoader.from(reflectionHelper::getGetterFor));
         setterCache = cacheBuilder.build(CacheLoader.from(reflectionHelper::getSetterFor));
     }
 
     public ClassStructure search(Class clazz) {
+        return structureCache.getUnchecked(clazz);
+    }
+
+    private ClassStructure search0(Class clazz) {
         Set<Field> fields = fieldSearcher.search(clazz); //find all fields in class
         Set<Property> properties = new TreeSet<>(Comparator.comparing(Property::getName));
 
