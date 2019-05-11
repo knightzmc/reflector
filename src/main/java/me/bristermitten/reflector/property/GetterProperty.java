@@ -1,14 +1,15 @@
-package me.bristermitten.reflector.generator.property;
+package me.bristermitten.reflector.property;
 
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import lombok.ToString;
 import me.bristermitten.reflector.Reflector;
-import me.bristermitten.reflector.generator.property.setter.Setter;
-import me.bristermitten.reflector.generator.property.setter.SetterFactory;
+import me.bristermitten.reflector.property.setter.Setter;
+import me.bristermitten.reflector.property.setter.SetterFactory;
 import me.bristermitten.reflector.helper.ReflectionHelper;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Objects;
@@ -34,5 +35,15 @@ public class GetterProperty extends AbstractProperty {
     @Override
     public Setter createSetter(Object settingOn) {
         return Setter.EMPTY;
+    }
+
+    @Override
+    public boolean hasAnnotation(@NotNull Class<? extends Annotation> annotation) {
+        return getter.isAnnotationPresent(annotation);
+    }
+
+    @Override
+    public <A extends Annotation> A getAnnotation(@NotNull Class<A> aClass) {
+        return getter.getAnnotation(aClass);
     }
 }

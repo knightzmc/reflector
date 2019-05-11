@@ -6,11 +6,12 @@ import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.name.Names;
 import me.bristermitten.reflector.config.Options;
 import me.bristermitten.reflector.generator.property.*;
-import me.bristermitten.reflector.generator.property.setter.FieldSetter;
-import me.bristermitten.reflector.generator.property.setter.Setter;
-import me.bristermitten.reflector.generator.property.setter.SetterFactory;
-import me.bristermitten.reflector.generator.property.setter.SetterSetter;
-import me.bristermitten.reflector.generator.searcher.*;
+import me.bristermitten.reflector.property.*;
+import me.bristermitten.reflector.property.setter.FieldSetter;
+import me.bristermitten.reflector.property.setter.Setter;
+import me.bristermitten.reflector.property.setter.SetterFactory;
+import me.bristermitten.reflector.property.setter.SetterSetter;
+import me.bristermitten.reflector.searcher.*;
 
 public class ReflectorBindingModule extends AbstractModule {
     private final Options options;

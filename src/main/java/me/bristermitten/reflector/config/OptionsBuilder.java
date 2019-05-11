@@ -1,9 +1,9 @@
 package me.bristermitten.reflector.config;
 
-import me.bristermitten.reflector.generator.searcher.AccessorMatcher;
-import me.bristermitten.reflector.generator.searcher.AccessorMatcher.DefaultAccessorMatcher;
-import me.bristermitten.reflector.generator.searcher.NameDecider;
-import me.bristermitten.reflector.generator.searcher.NameDecider.DefaultNameDecider;
+import me.bristermitten.reflector.searcher.AccessorMatcher;
+import me.bristermitten.reflector.searcher.AccessorMatcher.DefaultAccessorMatcher;
+import me.bristermitten.reflector.searcher.NameDecider;
+import me.bristermitten.reflector.searcher.NameDecider.DefaultNameDecider;
 
 public class OptionsBuilder {
     private boolean includeFields = false;
