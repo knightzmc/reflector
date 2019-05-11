@@ -22,9 +22,10 @@ public abstract class AbstractProperty implements Property {
     protected final Class type;
     protected final String name;
     protected final Field field;
-    protected final @Nullable Method setter;
-    protected final @Nullable Method getter;
+    protected final @Nullable Method setterM;
+    protected final @Nullable Method getterM;
     private Object source;
+    private Setter setter;
 
     @Inject
     public AbstractProperty(ReflectionHelper reflectionHelper,
@@ -32,15 +33,15 @@ public abstract class AbstractProperty implements Property {
                             Reflector reflector,
                             String name,
                             Field field,
-                            @Nullable Method getter,
-                            @Nullable Method setter) {
+                            @Nullable Method getterM,
+                            @Nullable Method setterM) {
         this.reflectionHelper = reflectionHelper;
         this.factory = factory;
         this.type = Primitives.wrap(field.getType());
         this.name = name;
         this.field = field;
-        this.setter = setter;
-        this.getter = getter;
+        this.setterM = setterM;
+        this.getterM = getterM;
         this.reflector = reflector;
     }
 
@@ -57,7 +58,8 @@ public abstract class AbstractProperty implements Property {
 
     @Override
     public Setter createSetter() {
-        return createSetter(source);
+        if (setter != null) return setter;
+        return setter = createSetter(source);
     }
 
     @Override
@@ -80,6 +82,7 @@ public abstract class AbstractProperty implements Property {
     @Override
     public void setSource(Object source) {
         this.source = source;
+        setter = null; //remove setter cached for the previous source
     }
 
     @Override

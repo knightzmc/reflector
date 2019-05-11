@@ -22,33 +22,33 @@ public class FullAccessorProperty extends AbstractProperty {
                                 Reflector reflector,
                                 @Assisted String name,
                                 @Assisted Field field,
-                                @Assisted("getter") @NotNull Method getter,
-                                @Assisted("setter") @NotNull Method setter) {
+                                @Assisted("getterM") @NotNull Method getter,
+                                @Assisted("setterM") @NotNull Method setter) {
         super(helper, factory, reflector, name, field, getter, setter);
     }
 
     @Override
     public Object getValue(Object source) {
-        return reflectionHelper.invokeMethod(Objects.requireNonNull(getter), source);
+        return reflectionHelper.invokeMethod(Objects.requireNonNull(getterM), source);
     }
 
     @Override
     public Setter createSetter(Object settingOn) {
-        return factory.createSetterSetter(setter, settingOn);
+        return factory.createSetterSetter(setterM, settingOn);
     }
 
     @Override
     public boolean hasAnnotation(@NotNull Class<? extends Annotation> annotation) {
-        boolean has = getter.isAnnotationPresent(annotation);
-        if (!has) has = setter.isAnnotationPresent(annotation);
+        boolean has = getterM.isAnnotationPresent(annotation);
+        if (!has) has = setterM.isAnnotationPresent(annotation);
         if (!has) has = field.isAnnotationPresent(annotation);
         return has;
     }
 
     @Override
     public <A extends Annotation> A getAnnotation(@NotNull Class<A> aClass) {
-        A a = getter.getAnnotation(aClass);
-        if (a == null) a = setter.getAnnotation(aClass);
+        A a = getterM.getAnnotation(aClass);
+        if (a == null) a = setterM.getAnnotation(aClass);
         if (a == null) a = field.getAnnotation(aClass);
         return a;
     }

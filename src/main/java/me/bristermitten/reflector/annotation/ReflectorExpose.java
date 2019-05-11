@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 /**
  * Forces Reflector to create properties of the marked item
  * This annotation violates best practices of making beans and JUI-compatible classes,
- * and so should only be used as a workaround where exposing a getter isn't possible.
+ * and so should only be used as a workaround where exposing a getterM isn't possible.
  * <p>
  * An example usage is as follows
  * <pre>
