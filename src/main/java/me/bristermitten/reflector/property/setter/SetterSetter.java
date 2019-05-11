@@ -33,7 +33,8 @@ public class SetterSetter<V> implements Setter {
     @Override
     public Object set(Object newValue) {
         Object cached = cachedValue;
-        cachedValue = helper.invokeMethod(setter, setOn, newValue);
+        helper.invokeMethod(setter, setOn, newValue);
+        cachedValue = newValue;
         return cached;
     }
 }
