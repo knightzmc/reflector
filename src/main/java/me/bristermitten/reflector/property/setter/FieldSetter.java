@@ -10,6 +10,7 @@ public class FieldSetter<V> implements Setter {
     private final Field toSet;
     private final Object settingOn;
     private final ReflectionHelper helper;
+    private Object cachedValue;
 
     @Inject
     public FieldSetter(ReflectionHelper helper,
@@ -21,6 +22,8 @@ public class FieldSetter<V> implements Setter {
 
     @Override
     public Object set(Object newValue) {
-        return helper.setFieldValue(toSet, settingOn, newValue);
+        Object cached = cachedValue;
+        cachedValue = helper.setFieldValue(toSet, settingOn, newValue);
+        return cached;
     }
 }

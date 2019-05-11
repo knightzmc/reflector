@@ -19,6 +19,7 @@ public class SetterSetter<V> implements Setter {
     private final Method setter;
     private final Object setOn;
     private final ReflectionHelper helper;
+    private Object cachedValue;
 
     @AssistedInject
     public SetterSetter(@Assisted Method setter,
@@ -31,6 +32,8 @@ public class SetterSetter<V> implements Setter {
 
     @Override
     public Object set(Object newValue) {
-        return helper.invokeMethod(setter, setOn, newValue);
+        Object cached = cachedValue;
+        cachedValue = helper.invokeMethod(setter, setOn, newValue);
+        return cached;
     }
 }
