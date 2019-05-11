@@ -9,6 +9,12 @@ import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 import me.bristermitten.reflector.annotation.ReflectorExpose;
 import me.bristermitten.reflector.config.Options;
+<<<<<<< HEAD:src/main/java/me/bristermitten/reflector/searcher/ClassSearcher.java
+import me.bristermitten.reflector.property.Property;
+import me.bristermitten.reflector.property.PropertyFactory;
+import me.bristermitten.reflector.property.structure.ClassStructure;
+=======
+>>>>>>> 7abc07d18c071d4af5c28719584509a0782193d9:src/main/java/me/bristermitten/reflector/searcher/ClassSearcher.java
 import me.bristermitten.reflector.helper.ReflectionHelper;
 import me.bristermitten.reflector.property.Property;
 import me.bristermitten.reflector.property.PropertyFactory;

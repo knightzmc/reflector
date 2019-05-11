@@ -4,16 +4,10 @@ import me.bristermitten.reflector.annotation.ReflectorExpose;
 import me.bristermitten.reflector.property.setter.Setter;
 import me.bristermitten.reflector.property.structure.ClassStructure;
 import me.bristermitten.reflector.property.valued.ValuedClassStructure;
-<<<<<<< HEAD:src/main/java/me/bristermitten/reflector/property/Property.java
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.annotation.Annotation;
-=======
-import org.jetbrains.annotations.Nullable;
-
->>>>>>> 7abc07d18c071d4af5c28719584509a0782193d9:src/main/java/me/bristermitten/reflector/property/Property.java
-import java.util.Set;
 
 /**
  * A property goes beyond the traditional definition of a field with a getter and setter,
@@ -43,18 +37,9 @@ import java.util.Set;
  * {@link ClassStructure#getProperties()}, but will have a value if it is retrieved from
  * {@link ValuedClassStructure#getProperties()}
  */
-<<<<<<< HEAD:src/main/java/me/bristermitten/reflector/property/Property.java
-public interface Property {
-=======
-public interface Property extends Element{
->>>>>>> 7abc07d18c071d4af5c28719584509a0782193d9:src/main/java/me/bristermitten/reflector/property/Property.java
-    Class getType();
+public interface Property extends Element {
 
     Object getValue(Object source);
-
-    Object getValue();
-
-    String getName();
 
     Setter createSetter(@Nullable Object settingOn);
 
@@ -63,10 +48,6 @@ public interface Property extends Element{
     Object getSource();
 
     void setSource(Object source);
-
-    Set<Property> getProperties();
-
-    boolean isComplexType();
 
     //annotation methods
     boolean hasAnnotation(@NotNull Class<? extends Annotation> annotation);

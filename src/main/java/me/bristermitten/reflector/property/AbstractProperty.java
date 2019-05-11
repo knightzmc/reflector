@@ -6,6 +6,7 @@ import lombok.ToString;
 import me.bristermitten.reflector.Reflector;
 import me.bristermitten.reflector.helper.ReflectionHelper;
 import me.bristermitten.reflector.property.setter.Setter;
+import me.bristermitten.reflector.property.setter.SetterFactory;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
