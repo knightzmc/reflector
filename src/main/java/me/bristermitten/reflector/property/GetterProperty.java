@@ -30,7 +30,7 @@ public class GetterProperty extends AbstractProperty {
 
     @Override
     public Object getValue(Object source) {
-        return reflectionHelper.invokeMethod(Objects.requireNonNull(getterM), source);
+        return reflectionHelper.invokeMethod(Objects.requireNonNull(getterMethod), source);
     }
 
     @Override
@@ -38,13 +38,4 @@ public class GetterProperty extends AbstractProperty {
         return Setter.EMPTY;
     }
 
-    @Override
-    public boolean hasAnnotation(@NotNull Class<? extends Annotation> annotation) {
-        return getterM.isAnnotationPresent(annotation);
-    }
-
-    @Override
-    public <A extends Annotation> A getAnnotation(@NotNull Class<A> aClass) {
-        return getterM.getAnnotation(aClass);
-    }
 }

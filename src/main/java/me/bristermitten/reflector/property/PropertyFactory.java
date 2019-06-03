@@ -10,12 +10,20 @@ import java.lang.reflect.Method;
 public interface PropertyFactory {
 
     @Named("FullAccessorProperty")
-    Property createProperty(String name, Field field, @Assisted("getter") Method getter,
-                            @Assisted("setter") Method setter, PropertyInfo info);
+    Property createProperty(String name,
+                            Field field,
+                            @Assisted("getterMethod") Method getter,
+                            @Assisted("setterMethod") Method setter,
+                            PropertyInfo info);
 
     @Named("GetterProperty")
-    Property createProperty(String name, Field field, Method getter, PropertyInfo info);
+    Property createProperty(String name,
+                            Field field,
+                            Method getter,
+                            PropertyInfo info);
 
     @Named("FieldProperty")
-    Property createProperty(String name, Field field, PropertyInfo info);
+    Property createProperty(String name,
+                            Field field,
+                            PropertyInfo info);
 }

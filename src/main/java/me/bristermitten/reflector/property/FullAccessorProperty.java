@@ -8,7 +8,6 @@ import me.bristermitten.reflector.property.info.PropertyInfo;
 import me.bristermitten.reflector.property.setter.Setter;
 import me.bristermitten.reflector.property.setter.SetterFactory;
 import me.bristermitten.reflector.helper.ReflectionHelper;
-import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -22,20 +21,20 @@ public class FullAccessorProperty extends AbstractProperty {
                                 Reflector reflector,
                                 @Assisted String name,
                                 @Assisted Field field,
-                                @Assisted("getter") Method getter,
-                                @Assisted("setter") Method setter,
+                                @Assisted("getterMethod") Method getter,
+                                @Assisted("setterMethod") Method setter,
                                 @Assisted PropertyInfo info) {
         super(helper, factory, reflector, name, field, getter, setter, info);
     }
 
     @Override
     public Object getValue(Object source) {
-        return reflectionHelper.invokeMethod(Objects.requireNonNull(getter), source);
+        return reflectionHelper.invokeMethod(Objects.requireNonNull(getterMethod), source);
     }
 
     @Override
     public Setter createSetter(Object settingOn) {
-        return factory.createSetterSetter(setter, settingOn);
+        return factory.createSetterSetter(setterMethod, settingOn);
     }
 
 }

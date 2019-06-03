@@ -5,10 +5,7 @@ import me.bristermitten.reflector.property.info.PropertyInfo;
 import me.bristermitten.reflector.property.setter.Setter;
 import me.bristermitten.reflector.property.structure.ClassStructure;
 import me.bristermitten.reflector.property.valued.ValuedClassStructure;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.lang.annotation.Annotation;
 
 /**
  * A property goes beyond the traditional definition of a field with a getterM and setterM,
@@ -51,10 +48,6 @@ public interface Property extends Element {
 
     void setSource(Object source);
 
-    //annotation methods
-    boolean hasAnnotation(@NotNull Class<? extends Annotation> annotation);
-
-    <A extends Annotation> A getAnnotation(@NotNull Class<A> aClass);
     boolean isComplexType();
 
     PropertyInfo getInfo();

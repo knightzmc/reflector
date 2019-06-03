@@ -5,6 +5,7 @@ import com.google.inject.Inject;
 import lombok.ToString;
 import me.bristermitten.reflector.Reflector;
 import me.bristermitten.reflector.helper.ReflectionHelper;
+import me.bristermitten.reflector.property.info.PropertyInfo;
 import me.bristermitten.reflector.property.setter.Setter;
 import me.bristermitten.reflector.property.setter.SetterFactory;
 import org.jetbrains.annotations.Nullable;
@@ -22,8 +23,8 @@ public abstract class AbstractProperty implements Property {
     protected final Class type;
     protected final String name;
     protected final Field field;
-    protected final @Nullable Method setter;
-    protected final @Nullable Method getter;
+    protected final @Nullable Method setterMethod;
+    protected final @Nullable Method getterMethod;
     protected final PropertyInfo info;
     private Object source;
     private Setter setter;
@@ -34,16 +35,16 @@ public abstract class AbstractProperty implements Property {
                             Reflector reflector,
                             String name,
                             Field field,
-                            @Nullable Method getter,
-                            @Nullable Method setter,
+                            @Nullable Method getterMethod,
+                            @Nullable Method setterMethod,
                             PropertyInfo info) {
         this.reflectionHelper = reflectionHelper;
         this.factory = factory;
         this.type = Primitives.wrap(field.getType());
         this.name = name;
         this.field = field;
-        this.setter = setter;
-        this.getter = getter;
+        this.setterMethod = setterMethod;
+        this.getterMethod = getterMethod;
         this.reflector = reflector;
         this.info = info;
     }
@@ -85,7 +86,7 @@ public abstract class AbstractProperty implements Property {
     @Override
     public void setSource(Object source) {
         this.source = source;
-        setter = null; //remove setter cached for the previous source
+        setter = null; //remove setterMethod cached for the previous source
     }
 
     @Override
