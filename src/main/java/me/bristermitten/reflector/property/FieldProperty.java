@@ -4,9 +4,10 @@ import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import lombok.ToString;
 import me.bristermitten.reflector.Reflector;
+import me.bristermitten.reflector.helper.ReflectionHelper;
+import me.bristermitten.reflector.property.info.PropertyInfo;
 import me.bristermitten.reflector.property.setter.Setter;
 import me.bristermitten.reflector.property.setter.SetterFactory;
-import me.bristermitten.reflector.helper.ReflectionHelper;
 
 import java.lang.reflect.Field;
 
@@ -18,8 +19,9 @@ public class FieldProperty extends AbstractProperty {
                          SetterFactory factory,
                          Reflector reflector,
                          @Assisted String name,
-                         @Assisted Field field) {
-        super(helper, factory, reflector, name, field, null, null);
+                         @Assisted Field field,
+                         @Assisted PropertyInfo info) {
+        super(helper, factory, reflector, name, field, null, null, info);
     }
 
     @Override

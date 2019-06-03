@@ -3,9 +3,10 @@ package me.bristermitten.reflector.property.structure;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import lombok.Data;
-import me.bristermitten.reflector.property.Property;
-import me.bristermitten.reflector.property.valued.ValuedClassStructure;
 import me.bristermitten.reflector.helper.ReflectionHelper;
+import me.bristermitten.reflector.property.Property;
+import me.bristermitten.reflector.property.info.search.PropertySearcher;
+import me.bristermitten.reflector.property.valued.ValuedClassStructure;
 
 import java.util.Set;
 
@@ -18,9 +19,8 @@ import java.util.Set;
  */
 @Data
 public class ClassStructure {
-
     /**
-     * The Class that this ClassStructure wraps. Ideally a Java Bean / POJO.
+     * The Class that this ClassStructure wraps. Ideally a Bean.
      */
     private final Class type;
     /**
@@ -42,6 +42,10 @@ public class ClassStructure {
 
     public boolean isComplexType() {
         return !helper.isSimple(type);
+    }
+
+    public PropertySearcher searchProperties() {
+        return new PropertySearcher(this);
     }
 
 }

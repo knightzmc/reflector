@@ -12,6 +12,7 @@ import me.bristermitten.reflector.config.Options;
 import me.bristermitten.reflector.helper.ReflectionHelper;
 import me.bristermitten.reflector.property.Property;
 import me.bristermitten.reflector.property.PropertyFactory;
+import me.bristermitten.reflector.property.info.InfoFactory;
 import me.bristermitten.reflector.property.structure.ClassStructure;
 
 import java.lang.reflect.Field;
@@ -31,20 +32,23 @@ public class ClassSearcher {
     private final PropertyFactory propertyFactory;
     private final ClassStructureFactory structureFactory;
     private final NameDecider decider;
+    private final InfoFactory factory;
 
     @Inject
     public ClassSearcher(
-            Options options,
             @Named("FieldSearcher") Searcher fieldSearcher,
+            Options options,
             ReflectionHelper reflectionHelper,
             PropertyFactory propertyFactory,
             ClassStructureFactory structureFactory,
-            NameDecider decider) {
+            NameDecider decider,
+            InfoFactory factory) {
         this.options = options;
         this.fieldSearcher = fieldSearcher;
         this.propertyFactory = propertyFactory;
         this.structureFactory = structureFactory;
         this.decider = decider;
+        this.factory = factory;
 
         CacheBuilder cacheBuilder = CacheBuilder.newBuilder();
         structureCache = cacheBuilder.build(CacheLoader.from(this::search0));
@@ -73,17 +77,23 @@ public class ClassSearcher {
     private Property getProperty(Field field, Method getter, Method setter) {
         String name = decider.makeName(field);
         if (getter != null && setter != null) {
-            return propertyFactory.createProperty(name, field, getter, setter);
+            return propertyFactory.createProperty(name, field, getter, setter,
+                    factory.createInfo(field, getter, setter));
         }
         if (getter != null) {
-            return propertyFactory.createProperty(name, field, getter);
+            return propertyFactory.createProperty(name, field, getter,
+                    factory.createInfo(field, getter));
         }
+
         if (options.includeFields()) //fields must be marked as included
+        {
             if (Modifier.isPublic(field.getModifiers()) //we only include public fields
                     || field.isAnnotationPresent(ReflectorExpose.class)) //or force a non-public field
             {
-                return propertyFactory.createProperty(name, field);
+                return propertyFactory.createProperty(name, field,
+                        factory.createInfo(field));
             }
+        }
         return null; //TODO implement a "no properties found" return value
     }
 

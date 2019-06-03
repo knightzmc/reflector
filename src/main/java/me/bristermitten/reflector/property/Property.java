@@ -1,6 +1,7 @@
 package me.bristermitten.reflector.property;
 
 import me.bristermitten.reflector.annotation.ReflectorExpose;
+import me.bristermitten.reflector.property.info.PropertyInfo;
 import me.bristermitten.reflector.property.setter.Setter;
 import me.bristermitten.reflector.property.structure.ClassStructure;
 import me.bristermitten.reflector.property.valued.ValuedClassStructure;
@@ -36,7 +37,7 @@ import java.util.Set;
  * {@link ClassStructure#getProperties()}, but will have a value if it is retrieved from
  * {@link ValuedClassStructure#getProperties()}
  */
-public interface Property extends Element{
+public interface Property extends Element {
     Class getType();
 
     Object getValue(Object source);
@@ -56,4 +57,6 @@ public interface Property extends Element{
     Set<Property> getProperties();
 
     boolean isComplexType();
+
+    PropertyInfo getInfo();
 }

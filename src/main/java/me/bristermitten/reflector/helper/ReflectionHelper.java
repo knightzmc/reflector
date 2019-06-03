@@ -9,6 +9,8 @@ import com.google.inject.name.Named;
 import me.bristermitten.reflector.searcher.AccessorMatcher;
 import me.bristermitten.reflector.searcher.Searcher;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -51,6 +53,7 @@ public class ReflectionHelper {
                     .put(short.class, Short.class)
                     .put(void.class, Void.class)
                     .build();
+    private final ArrayHelper<Annotation> helper = new ArrayHelper<>(Annotation.class);
 
 
     @Inject
@@ -153,7 +156,7 @@ public class ReflectionHelper {
     /**
      * Check if a given class represents a primitive class type
      * That is, if the given class is equal to the boxed or primitive class
-     * For example, if {clazz} is Integer.class and {type} is int.class,
+     * For example, if {type} is Integer.class and {type} is int.class,
      * true will be returned
      *
      * @param clazz the class to check
@@ -166,5 +169,10 @@ public class ReflectionHelper {
         if (clazz == type) return true;
         return PRIMITIVES_TO_WRAPPERS.get(clazz) == type
                 || PRIMITIVES_TO_WRAPPERS.inverse().get(clazz) == type;
+    }
+
+
+    public Annotation[] getAnnotations(AnnotatedElement member) {
+        return helper.add(member.getAnnotations(), member.getDeclaredAnnotations());
     }
 }

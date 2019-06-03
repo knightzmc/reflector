@@ -5,6 +5,7 @@ import com.google.inject.Inject;
 import lombok.ToString;
 import me.bristermitten.reflector.Reflector;
 import me.bristermitten.reflector.helper.ReflectionHelper;
+import me.bristermitten.reflector.property.info.PropertyInfo;
 import me.bristermitten.reflector.property.setter.Setter;
 import me.bristermitten.reflector.property.setter.SetterFactory;
 import org.jetbrains.annotations.Nullable;
@@ -24,6 +25,7 @@ public abstract class AbstractProperty implements Property {
     protected final Field field;
     protected final @Nullable Method setter;
     protected final @Nullable Method getter;
+    protected final PropertyInfo info;
     private Object source;
 
     @Inject
@@ -33,7 +35,8 @@ public abstract class AbstractProperty implements Property {
                             String name,
                             Field field,
                             @Nullable Method getter,
-                            @Nullable Method setter) {
+                            @Nullable Method setter,
+                            PropertyInfo info) {
         this.reflectionHelper = reflectionHelper;
         this.factory = factory;
         this.type = Primitives.wrap(field.getType());
@@ -42,6 +45,7 @@ public abstract class AbstractProperty implements Property {
         this.setter = setter;
         this.getter = getter;
         this.reflector = reflector;
+        this.info = info;
     }
 
 
@@ -85,5 +89,10 @@ public abstract class AbstractProperty implements Property {
     @Override
     public boolean isComplexType() {
         return !reflectionHelper.isSimple(type);
+    }
+
+    @Override
+    public PropertyInfo getInfo() {
+        return info;
     }
 }

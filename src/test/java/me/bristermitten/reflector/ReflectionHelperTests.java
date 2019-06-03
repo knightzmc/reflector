@@ -8,6 +8,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import java.lang.annotation.Annotation;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Set;
 
@@ -64,7 +68,6 @@ public class ReflectionHelperTests {
     }
 
     @Test
-    @SneakyThrows
     public void testReflection_represents_returnsTrueWhenRepresents() {
         final Class primClass = int.class;
         final Class wrappedClass = Integer.class;
@@ -72,6 +75,19 @@ public class ReflectionHelperTests {
         assertFalse(helper.represents(primClass, String.class));
     }
 
+
+    @Test
+    @SneakyThrows
+    public void testReflection_getAnnotations_findCorrectly() {
+        TestAnnotationClass testAnnotationClass = new TestAnnotationClass();
+        Field field = testAnnotationClass.getClass().getDeclaredField("test");
+        Annotation[] annotations = helper.getAnnotations(field);
+        assertEquals(1, annotations.length);
+    }
+
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface TestAnnotation {
+    }
 
     public static class TestMethodsClass {
         void doNothing() {
@@ -81,5 +97,10 @@ public class ReflectionHelperTests {
         String returnString(String s) {
             return s;
         }
+    }
+
+    public static class TestAnnotationClass {
+        @TestAnnotation
+        private int test;
     }
 }

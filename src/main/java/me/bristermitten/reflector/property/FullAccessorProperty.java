@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import lombok.ToString;
 import me.bristermitten.reflector.Reflector;
+import me.bristermitten.reflector.property.info.PropertyInfo;
 import me.bristermitten.reflector.property.setter.Setter;
 import me.bristermitten.reflector.property.setter.SetterFactory;
 import me.bristermitten.reflector.helper.ReflectionHelper;
@@ -21,9 +22,10 @@ public class FullAccessorProperty extends AbstractProperty {
                                 Reflector reflector,
                                 @Assisted String name,
                                 @Assisted Field field,
-                                @Assisted("getter") @NotNull Method getter,
-                                @Assisted("setter") @NotNull Method setter) {
-        super(helper, factory, reflector, name, field, getter, setter);
+                                @Assisted("getter") Method getter,
+                                @Assisted("setter") Method setter,
+                                @Assisted PropertyInfo info) {
+        super(helper, factory, reflector, name, field, getter, setter, info);
     }
 
     @Override
