@@ -11,7 +11,6 @@ import me.bristermitten.reflector.property.structure.ClassStructure;
 import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
-
 public class ValuedClassStructure extends ClassStructure implements Element {
     private final Map<Property, Object> cachedPropertyValues = new WeakHashMap<>();
 

@@ -5,12 +5,13 @@ import me.bristermitten.reflector.property.info.PropertyInfo;
 import me.bristermitten.reflector.property.setter.Setter;
 import me.bristermitten.reflector.property.structure.ClassStructure;
 import me.bristermitten.reflector.property.valued.ValuedClassStructure;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Set;
+import java.lang.annotation.Annotation;
 
 /**
- * A property goes beyond the traditional definition of a field with a getter and setter,
+ * A property goes beyond the traditional definition of a field with a getterM and setterM,
  * simply because I couldn't think of a better name.
  * <p>
  * A property represents a piece of data in an object, which does not necessarily have any
@@ -21,11 +22,11 @@ import java.util.Set;
  * <p>
  * A public field without any accessor methods,
  * <p>
- * A private field with a getter only,
+ * A private field with a getterM only,
  * <p>
- * Or a private field with a setter and getter.
+ * Or a private field with a setterM and getterM.
  * <p>
- * A private field without a getter is not supported, as it indicates that the value is not
+ * A private field without a getterM is not supported, as it indicates that the value is not
  * for viewing and should stay encapsulated (this is subject to change).
  * <p>
  * A property in its most abstract form is simply a wrapper of a Field and/or Method object
@@ -42,10 +43,6 @@ public interface Property extends Element {
 
     Object getValue(Object source);
 
-    Object getValue();
-
-    String getName();
-
     Setter createSetter(@Nullable Object settingOn);
 
     Setter createSetter();
@@ -54,8 +51,10 @@ public interface Property extends Element {
 
     void setSource(Object source);
 
-    Set<Property> getProperties();
+    //annotation methods
+    boolean hasAnnotation(@NotNull Class<? extends Annotation> annotation);
 
+    <A extends Annotation> A getAnnotation(@NotNull Class<A> aClass);
     boolean isComplexType();
 
     PropertyInfo getInfo();

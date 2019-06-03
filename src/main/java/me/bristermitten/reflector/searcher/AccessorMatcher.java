@@ -9,9 +9,9 @@ import java.lang.reflect.Method;
 
 /**
  * Configurable interface used in {@link ClassSearcher} to determine if a given method
- * is a getter or setter for a given field, which is then used for creating {@link Property} objects
- * In {@link DefaultAccessorMatcher}, the spec for a getter is: {var} get{varName}()
- * and the spec for a setter is void set{varName}({var} {varName});
+ * is a getterM or setterM for a given field, which is then used for creating {@link Property} objects
+ * In {@link DefaultAccessorMatcher}, the spec for a getterM is: {var} get{varName}()
+ * and the spec for a setterM is void set{varName}({var} {varName});
  * However if your platform uses fluent accessors, or something else, you may wish to
  * change this implementation so your accessors are found
  */

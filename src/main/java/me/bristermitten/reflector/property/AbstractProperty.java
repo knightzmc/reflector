@@ -5,7 +5,6 @@ import com.google.inject.Inject;
 import lombok.ToString;
 import me.bristermitten.reflector.Reflector;
 import me.bristermitten.reflector.helper.ReflectionHelper;
-import me.bristermitten.reflector.property.info.PropertyInfo;
 import me.bristermitten.reflector.property.setter.Setter;
 import me.bristermitten.reflector.property.setter.SetterFactory;
 import org.jetbrains.annotations.Nullable;
@@ -27,6 +26,7 @@ public abstract class AbstractProperty implements Property {
     protected final @Nullable Method getter;
     protected final PropertyInfo info;
     private Object source;
+    private Setter setter;
 
     @Inject
     public AbstractProperty(ReflectionHelper reflectionHelper,
@@ -61,7 +61,8 @@ public abstract class AbstractProperty implements Property {
 
     @Override
     public Setter createSetter() {
-        return createSetter(source);
+        if (setter != null) return setter;
+        return setter = createSetter(source);
     }
 
     @Override
@@ -84,6 +85,7 @@ public abstract class AbstractProperty implements Property {
     @Override
     public void setSource(Object source) {
         this.source = source;
+        setter = null; //remove setter cached for the previous source
     }
 
     @Override

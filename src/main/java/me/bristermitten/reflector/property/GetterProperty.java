@@ -9,6 +9,7 @@ import me.bristermitten.reflector.property.info.PropertyInfo;
 import me.bristermitten.reflector.property.setter.Setter;
 import me.bristermitten.reflector.property.setter.SetterFactory;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Objects;
@@ -29,11 +30,21 @@ public class GetterProperty extends AbstractProperty {
 
     @Override
     public Object getValue(Object source) {
-        return reflectionHelper.invokeMethod(Objects.requireNonNull(getter), source);
+        return reflectionHelper.invokeMethod(Objects.requireNonNull(getterM), source);
     }
 
     @Override
     public Setter createSetter(Object settingOn) {
         return Setter.EMPTY;
+    }
+
+    @Override
+    public boolean hasAnnotation(@NotNull Class<? extends Annotation> annotation) {
+        return getterM.isAnnotationPresent(annotation);
+    }
+
+    @Override
+    public <A extends Annotation> A getAnnotation(@NotNull Class<A> aClass) {
+        return getterM.getAnnotation(aClass);
     }
 }
