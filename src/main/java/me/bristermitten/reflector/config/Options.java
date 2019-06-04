@@ -24,6 +24,6 @@ public class Options {
 
     private final Class<? extends AccessorMatcher> accessorMatcherClass;
     private final Class<? extends NameDecider> nameDeciderClass;
-    private boolean includeFields;
+    private FieldAccessLevel fieldAccessLevel;
     private boolean scanSuperClasses;
 }

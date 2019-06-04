@@ -17,7 +17,6 @@ import me.bristermitten.reflector.property.structure.ClassStructure;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.Set;
@@ -84,15 +83,10 @@ public class ClassSearcher {
             return propertyFactory.createProperty(name, field, getter,
                     factory.createInfo(field, getter));
         }
-
-        if (options.includeFields()) //fields must be marked as included
-        {
-            if (Modifier.isPublic(field.getModifiers()) //we only include public fields
-                    || field.isAnnotationPresent(ReflectorExpose.class)) //or force a non-public field
-            {
-                return propertyFactory.createProperty(name, field,
-                        factory.createInfo(field));
-            }
+        if (options.fieldAccessLevel().test(field) //field must have a set modifier
+                || field.isAnnotationPresent(ReflectorExpose.class)) { //or can be forced with an annotation
+            return propertyFactory.createProperty(name, field,
+                    factory.createInfo(field));
         }
         return null; //TODO implement a "no properties found" return value
     }
