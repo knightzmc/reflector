@@ -25,7 +25,10 @@ public interface FieldAccessLevel extends Predicate<Field> {
      * Field must be package private, protected, or public (not private)
      */
     FieldAccessLevel PACKAGE_PRIVATE = field -> !Modifier.isPrivate(field.getModifiers());
-
+    /**
+     * Field must be private
+     */
+    FieldAccessLevel PRIVATE = field -> Modifier.isPrivate(field.getModifiers());
     /**
      * No fields. Ever.
      */
