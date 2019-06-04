@@ -1,5 +1,6 @@
 package me.bristermitten.reflector.property.info.search;
 
+import com.google.common.primitives.Primitives;
 import me.bristermitten.reflector.property.Property;
 
 import java.util.Arrays;
@@ -14,6 +15,6 @@ public class TypeSearchCondition implements SearchCondition {
     @Override
     public boolean matches(Property p) {
         final Class type = p.getType();
-        return Arrays.stream(types).allMatch(type::equals);
+        return Arrays.stream(types).map(Primitives::wrap).allMatch(type::equals);
     }
 }
