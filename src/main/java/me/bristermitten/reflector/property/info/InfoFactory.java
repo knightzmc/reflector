@@ -15,7 +15,7 @@ public class InfoFactory {
     @Inject
     public InfoFactory(ReflectionHelper helper) {
         this.helper = helper;
-        this.a = new ArrayHelper<>();
+        this.a = helper.annotationHelper();
     }
 
     public PropertyInfo createInfo(Field f) {

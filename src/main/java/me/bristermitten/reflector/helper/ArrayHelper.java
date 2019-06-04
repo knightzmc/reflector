@@ -12,10 +12,6 @@ public class ArrayHelper<T> {
         this.type = type;
     }
 
-    public ArrayHelper() {
-
-    }
-
     @SafeVarargs
     public final T[] add(T[]... ts) {
         return add(this.type, ts);

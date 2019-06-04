@@ -175,4 +175,8 @@ public class ReflectionHelper {
     public Annotation[] getAnnotations(AnnotatedElement member) {
         return helper.add(member.getAnnotations(), member.getDeclaredAnnotations());
     }
+
+    public ArrayHelper<Annotation> annotationHelper(){
+        return helper;
+    }
 }
