@@ -11,9 +11,9 @@ import me.bristermitten.reflector.property.structure.ClassStructure;
 import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
+
 public class ValuedClassStructure extends ClassStructure implements Element {
     private final Map<Property, Object> cachedPropertyValues = new WeakHashMap<>();
-
     private Object valuesFrom;
 
     @Inject
@@ -36,6 +36,11 @@ public class ValuedClassStructure extends ClassStructure implements Element {
 
     public Object getValue() {
         return valuesFrom;
+    }
+
+    @Override
+    public boolean isSubTypeOf(Class type) {
+        return type.isAssignableFrom(getType());
     }
 
     public Map<Property, Object> getPropertyValues() {

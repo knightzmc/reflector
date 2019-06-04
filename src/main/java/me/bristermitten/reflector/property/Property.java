@@ -36,7 +36,6 @@ import org.jetbrains.annotations.Nullable;
  * {@link ValuedClassStructure#getProperties()}
  */
 public interface Property extends Element {
-    Class getType();
 
     Object getValue(Object source);
 

@@ -13,11 +13,11 @@ public interface Element {
 
     boolean isComplexType();
 
-
-
     String getName();
 
     Object getValue();
 
     Set<Property> getProperties();
+
+    boolean isSubTypeOf(Class type);
 }
