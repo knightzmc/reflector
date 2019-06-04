@@ -27,6 +27,13 @@ public class ArrayHelper<T> {
         for (T[] tArr : ts) {
             Collections.addAll(set, tArr);
         }
-        return set.toArray((T[]) Array.newInstance(type, set.size()));
+
+        T[] a = (T[]) Array.newInstance(type, set.size());
+        Object[] toArray = set.toArray();
+        for (int i = 0; i < toArray.length; i++) {
+            Object o = toArray[i];
+            a[i] = (T) o;
+        }
+        return a;
     }
 }
