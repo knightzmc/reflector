@@ -8,6 +8,7 @@ import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 import me.bristermitten.reflector.searcher.AccessorMatcher;
 import me.bristermitten.reflector.searcher.Searcher;
+import sun.misc.Unsafe;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
@@ -54,13 +55,13 @@ public class ReflectionHelper {
                     .put(void.class, Void.class)
                     .build();
     private final ArrayHelper<Annotation> helper = new ArrayHelper<>(Annotation.class);
-
-
     @Inject
     @Named("MethodSearcher")
     private Searcher methodSearcher;
     @Inject
     private AccessorMatcher matcher;
+    @Inject
+    private UnsafeHelper unsafeHelper;
 
     public <T> T invokeMethod(Method m, Object on, Object... args) {
         if (on == null || m == null) return null;
@@ -86,15 +87,18 @@ public class ReflectionHelper {
     }
 
     public <T> T setFieldValue(Field f, Object on, T newValue) {
+        f.setAccessible(true);
+        T previous = getFieldValue(f, on);
         try {
-            f.setAccessible(true);
-            T previous = getFieldValue(f, on);
             f.set(on, newValue);
-            f.setAccessible(false);
-            return previous;
         } catch (IllegalAccessException e) {
-            return null;
+            //let's try unsafe!
+            Unsafe unsafe = unsafeHelper.getUnsafe();
+            long offset = unsafe.objectFieldOffset(f);
+            unsafe.putObject(on, offset, newValue);
         }
+        f.setAccessible(false);
+        return previous;
     }
 
     public Method getMethod(Class declarer, String name, Class... args) {
@@ -176,7 +180,7 @@ public class ReflectionHelper {
         return helper.add(member.getAnnotations(), member.getDeclaredAnnotations());
     }
 
-    public ArrayHelper<Annotation> annotationHelper(){
+    public ArrayHelper<Annotation> annotationHelper() {
         return helper;
     }
 }
