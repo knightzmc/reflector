@@ -67,6 +67,9 @@ public class ClassStructure {
     public <T> InstanceConstructor<T> constructorFor(Class... types) throws NoConstructorExistsException {
         Optional<InstanceConstructor> first = constructors.stream().filter(c -> c.argsMatches(types)).findFirst();
         if (!first.isPresent()) {
+            if (types.length > 0) {
+                return constructorFor(Arrays.copyOf(types, types.length - 1)); //keep testing reducing arguments
+            }
             throw new NoConstructorExistsException("No constructor found for " + type + " with parameters " + Arrays.toString(types));
         }
         return first.get();
