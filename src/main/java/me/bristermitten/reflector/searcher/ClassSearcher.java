@@ -1,5 +1,6 @@
 package me.bristermitten.reflector.searcher;
 
+import com.google.common.base.Function;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -9,6 +10,7 @@ import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 import me.bristermitten.reflector.annotation.ReflectorExpose;
 import me.bristermitten.reflector.config.Options;
+import me.bristermitten.reflector.constructor.InstanceConstructor;
 import me.bristermitten.reflector.helper.ReflectionHelper;
 import me.bristermitten.reflector.property.Property;
 import me.bristermitten.reflector.property.PropertyFactory;
@@ -28,6 +30,7 @@ public class ClassSearcher {
     private final Searcher fieldSearcher;
     private final LoadingCache<Class, ClassStructure> structureCache;
     private final LoadingCache<Field, Optional<Method>> getterCache, setterCache;
+    private final LoadingCache<Class, Set<InstanceConstructor>> constructorCache;
     private final PropertyFactory propertyFactory;
     private final ClassStructureFactory structureFactory;
     private final NameDecider decider;
@@ -53,6 +56,7 @@ public class ClassSearcher {
         structureCache = cacheBuilder.build(CacheLoader.from(this::search0));
         getterCache = cacheBuilder.build(CacheLoader.from(reflectionHelper::getGetterFor));
         setterCache = cacheBuilder.build(CacheLoader.from(reflectionHelper::getSetterFor));
+        constructorCache = cacheBuilder.build(CacheLoader.from((Function<Class, Set<InstanceConstructor>>) reflectionHelper::getConstructors));
     }
 
     public ClassStructure search(Class clazz) {
@@ -62,7 +66,7 @@ public class ClassSearcher {
     private ClassStructure search0(Class clazz) {
         Set<Field> fields = fieldSearcher.search(clazz); //find all fields in class
         Set<Property> properties = new TreeSet<>(Comparator.comparing(Property::getName));
-
+        Set<InstanceConstructor> constructors = constructorCache.getUnchecked(clazz);
         for (Field field : fields) {
             Optional<Method> getter = getterCache.getUnchecked(field); //workaround as guava's caches don't allow null values
             Optional<Method> setter = setterCache.getUnchecked(field);
@@ -70,7 +74,7 @@ public class ClassSearcher {
             if (property != null)
                 properties.add(property);
         }
-        return structureFactory.createStructure(clazz, ImmutableSet.copyOf(properties));
+        return structureFactory.createStructure(clazz, ImmutableSet.copyOf(properties), constructors);
     }
 
     private Property getProperty(Field field, Method getter, Method setter) {

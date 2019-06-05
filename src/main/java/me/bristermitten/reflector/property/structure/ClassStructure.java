@@ -3,11 +3,15 @@ package me.bristermitten.reflector.property.structure;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import lombok.Data;
+import me.bristermitten.reflector.constructor.InstanceConstructor;
+import me.bristermitten.reflector.constructor.NoConstructorExistsException;
 import me.bristermitten.reflector.helper.ReflectionHelper;
 import me.bristermitten.reflector.property.Property;
 import me.bristermitten.reflector.property.info.search.PropertySearcher;
 import me.bristermitten.reflector.property.valued.ValuedClassStructure;
 
+import java.util.Arrays;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -31,12 +35,17 @@ public class ClassStructure {
 
     private final ReflectionHelper helper;
 
+    private final Set<InstanceConstructor> constructors;
+
     @Inject
     public ClassStructure(
             @Assisted Class type,
-            @Assisted Set<Property> properties, ReflectionHelper helper) {
+            @Assisted Set<Property> properties,
+            @Assisted Set<InstanceConstructor> constructors,
+            ReflectionHelper helper) {
         this.type = type;
         this.properties = properties;
+        this.constructors = constructors;
         this.helper = helper;
     }
 
@@ -48,4 +57,13 @@ public class ClassStructure {
         return new PropertySearcher(this);
     }
 
+
+    public <T> T createInstance(Object... args) {
+        Class[] argTypes = (Class[]) Arrays.stream(args).map(Object::getClass).toArray();
+        Optional<InstanceConstructor> first = constructors.stream().filter(c -> c.argsMatches(argTypes)).findFirst();
+        if (!first.isPresent()) {
+            throw new NoConstructorExistsException("No constructor found for " + type + " with parameters " + Arrays.toString(argTypes));
+        }
+        return (T) first.get().create(args);
+    }
 }

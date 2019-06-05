@@ -6,19 +6,16 @@ import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
+import me.bristermitten.reflector.constructor.InstanceConstructor;
 import me.bristermitten.reflector.searcher.AccessorMatcher;
 import me.bristermitten.reflector.searcher.Searcher;
 import sun.misc.Unsafe;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.lang.reflect.*;
 import java.util.Optional;
 import java.util.Set;
 
-@SuppressWarnings("ALL")
 @Singleton
 public class ReflectionHelper {
     private static final Set<Class<?>> PRIMITIVE_AND_WRAPPER_TYPES = ImmutableSet.of(
@@ -55,6 +52,7 @@ public class ReflectionHelper {
                     .put(void.class, Void.class)
                     .build();
     private final ArrayHelper<Annotation> helper = new ArrayHelper<>(Annotation.class);
+    private final ArrayHelper<Constructor> constructorHelper = new ArrayHelper<>(Constructor.class);
     @Inject
     @Named("MethodSearcher")
     private Searcher methodSearcher;
@@ -175,6 +173,14 @@ public class ReflectionHelper {
                 || PRIMITIVES_TO_WRAPPERS.inverse().get(clazz) == type;
     }
 
+    public <T> Set<InstanceConstructor> getConstructors(Class<T> clazz) {
+        Constructor[] constructors = constructorHelper.add(clazz.getConstructors(), clazz.getDeclaredConstructors());
+        ImmutableSet.Builder<InstanceConstructor> builder = ImmutableSet.builder();
+        for (Constructor constructor : constructors) {
+            builder.add(new InstanceConstructor<T>(constructor));
+        }
+        return builder.build();
+    }
 
     public Annotation[] getAnnotations(AnnotatedElement member) {
         return helper.add(member.getAnnotations(), member.getDeclaredAnnotations());
