@@ -3,6 +3,7 @@ package me.bristermitten.reflector;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import me.bristermitten.reflector.config.Options;
+import me.bristermitten.reflector.constructor.InstanceConstructor;
 import me.bristermitten.reflector.helper.ReflectionHelper;
 import me.bristermitten.reflector.inject.ReflectorBindingModule;
 import me.bristermitten.reflector.property.structure.ClassStructure;
@@ -58,7 +59,7 @@ public class Reflector {
 
     public ValuedClassStructure assignValues(ClassStructure structure, Object valuesFrom) {
         return factory.createValuedStructure(structure.getType(),
-                structure.getProperties(), valuesFrom);
+                structure.getProperties(), structure.getConstructors(), valuesFrom);
     }
 
     public ValuedClassStructure getValuedStructure(Object o) {
@@ -69,7 +70,11 @@ public class Reflector {
         return assignValues(structure, o);
     }
 
-    public ReflectionHelper helper(){
+    public <T> InstanceConstructor<T> construct(Class<T> tClass, Class... args) {
+        return getStructure(tClass).constructorFor(args);
+    }
+
+    public ReflectionHelper helper() {
         return reflectionHelper;
     }
 }

@@ -58,12 +58,17 @@ public class ClassStructure {
     }
 
 
-    public <T> T createInstance(Object... args) {
+    public <T> T createInstance(Object... args) throws NoConstructorExistsException {
         Class[] argTypes = (Class[]) Arrays.stream(args).map(Object::getClass).toArray();
-        Optional<InstanceConstructor> first = constructors.stream().filter(c -> c.argsMatches(argTypes)).findFirst();
+        InstanceConstructor<T> constructor = constructorFor(argTypes);
+        return constructor.create(args);
+    }
+
+    public <T> InstanceConstructor<T> constructorFor(Class... types) throws NoConstructorExistsException {
+        Optional<InstanceConstructor> first = constructors.stream().filter(c -> c.argsMatches(types)).findFirst();
         if (!first.isPresent()) {
-            throw new NoConstructorExistsException("No constructor found for " + type + " with parameters " + Arrays.toString(argTypes));
+            throw new NoConstructorExistsException("No constructor found for " + type + " with parameters " + Arrays.toString(types));
         }
-        return (T) first.get().create(args);
+        return first.get();
     }
 }

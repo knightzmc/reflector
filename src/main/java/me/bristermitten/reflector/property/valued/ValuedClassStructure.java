@@ -3,6 +3,7 @@ package me.bristermitten.reflector.property.valued;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
+import me.bristermitten.reflector.constructor.InstanceConstructor;
 import me.bristermitten.reflector.helper.ReflectionHelper;
 import me.bristermitten.reflector.property.Element;
 import me.bristermitten.reflector.property.Property;
@@ -19,9 +20,10 @@ public class ValuedClassStructure extends ClassStructure implements Element {
     @Inject
     public ValuedClassStructure(@Assisted Class type,
                                 @Assisted Set<Property> properties,
+                                @Assisted Set<InstanceConstructor> constructors,
                                 @Assisted Object valuesFrom,
                                 ReflectionHelper helper) {
-        super(type, valuesFrom == null ? ImmutableSet.of() : properties, helper);
+        super(type, valuesFrom == null ? ImmutableSet.of() : properties, constructors, helper);
         setValues(valuesFrom);
     }
 

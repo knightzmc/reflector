@@ -12,6 +12,6 @@ public interface ClassStructureFactory {
     ClassStructure createStructure(Class type, Set<Property> properties, Set<InstanceConstructor> constructors);
 
     ValuedClassStructure createValuedStructure(Class type, Set<Property> properties,
-                                               Object valuesFrom,
-                                               Set<InstanceConstructor> constructors);
+                                               Set<InstanceConstructor> constructors,
+                                               Object valuesFrom);
 }
