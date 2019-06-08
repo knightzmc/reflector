@@ -6,4 +6,6 @@ public interface Info {
     boolean hasAnnotation(Annotation annotation);
 
     boolean hasAnnotationType(Class<? extends Annotation> clazz);
+
+    <A extends Annotation> A getAnnotation(Class<A> clazz);
 }
