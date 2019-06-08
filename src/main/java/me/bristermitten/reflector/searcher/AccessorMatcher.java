@@ -22,10 +22,6 @@ public interface AccessorMatcher {
     boolean isGetter(Method m, Field getterFor);
 
 
-    /*
-            DEFAULT IMPLEMENTATION
-     */
-
     /**
      * Default implementation of {@link AccessorMatcher}
      *
@@ -48,7 +44,7 @@ public interface AccessorMatcher {
             if (m.getParameterCount() > 0) return false;
             if (m.getReturnType() != getterFor.getType()) return false;
             String getterVarName = m.getName().replace("get", "");
-            //some booleans use "is" instead of "get" eg "isAdmin
+            //some booleans use "is" instead of "get" eg "isAdmin"
             getterVarName = getterVarName.replace("is", "");
             return getterFor.getName().equalsIgnoreCase(getterVarName);
         }

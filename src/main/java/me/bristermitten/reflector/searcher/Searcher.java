@@ -3,6 +3,7 @@ package me.bristermitten.reflector.searcher;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import me.bristermitten.reflector.config.Options;
 
@@ -24,13 +25,19 @@ public abstract class Searcher<T> {
     protected Searcher(Options options) {
         this.options = options;
         cache = CacheBuilder.newBuilder()
-                .maximumSize(100).weakKeys().build(
-                        CacheLoader.from(this::find)
-                );
+                .maximumSize(100).weakKeys().build(CacheLoader.from(this::find));
     }
 
     public Set<T> search(Class clazz) {
         return cache.getUnchecked(clazz);
+    }
+
+    protected Set<T> searchSuper(Class clazz, ImmutableSet.Builder<T> builder) {
+        Class superClass = clazz.getSuperclass();
+        if (superClass != null && superClass != Object.class) {
+            builder.addAll(searchSuper(superClass.getSuperclass(), builder));
+        }
+        return builder.build();
     }
 
     protected abstract Set<T> find(Class clazz);
