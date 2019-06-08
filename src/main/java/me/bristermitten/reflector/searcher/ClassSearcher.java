@@ -7,7 +7,6 @@ import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.google.inject.name.Named;
 import me.bristermitten.reflector.annotation.ReflectorExpose;
 import me.bristermitten.reflector.config.Options;
 import me.bristermitten.reflector.constructor.InstanceConstructor;
@@ -28,7 +27,7 @@ import java.util.TreeSet;
 @Singleton
 public class ClassSearcher {
     private final Options options;
-    private final Searcher fieldSearcher;
+    private final FieldSearcher fieldSearcher;
     private final LoadingCache<Class, ClassStructure> structureCache;
     private final LoadingCache<Field, Optional<Method>> getterCache, setterCache;
     private final LoadingCache<Class, Set<InstanceConstructor>> constructorCache;
@@ -39,7 +38,7 @@ public class ClassSearcher {
 
     @Inject
     public ClassSearcher(
-            @Named("FieldSearcher") Searcher fieldSearcher,
+            FieldSearcher fieldSearcher,
             Options options,
             ReflectionHelper reflectionHelper,
             PropertyFactory propertyFactory,
@@ -65,12 +64,11 @@ public class ClassSearcher {
     }
 
     private ClassStructure search0(Class clazz) {
-        Set<Field> fields = fieldSearcher.search(clazz); //find all fields in class
         Info info = factory.createInfo(clazz);
         Set<InstanceConstructor> constructors = constructorCache.getUnchecked(clazz);
 
         Set<Property> properties = new TreeSet<>(Comparator.comparing(Property::getName));
-        for (Field field : fields) {
+        for (Field field : fieldSearcher.search(clazz)) {
             Optional<Method> getter = getterCache.getUnchecked(field); //workaround as guava's caches don't allow null values
             Optional<Method> setter = setterCache.getUnchecked(field);
             Property property = getProperty(field, getter.orElse(null), setter.orElse(null));

@@ -17,9 +17,6 @@ public class FieldSearcher extends Searcher<Field> {
     protected void find0(Class clazz, Set<Field> addTo) {
         Collections.addAll(addTo, clazz.getDeclaredFields());
         Collections.addAll(addTo, clazz.getFields());
-        if (options.scanSuperClasses()) {
-            searchSuper(clazz, addTo);
-        }
         addTo.removeIf(Field::isSynthetic);
     }
 }

@@ -20,9 +20,6 @@ public class MethodSearcher extends Searcher<Method> {
     protected void find0(Class clazz, Set<Method> addTo) {
         Collections.addAll(addTo, clazz.getDeclaredMethods());
         Collections.addAll(addTo, clazz.getMethods());
-        if (options.scanSuperClasses()) {
-            searchSuper(clazz, addTo);
-        }
         addTo.removeIf(Method::isSynthetic);
     }
 }

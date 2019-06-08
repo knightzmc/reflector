@@ -33,17 +33,18 @@ public abstract class Searcher<T> {
         return cache.getUnchecked(clazz);
     }
 
-    protected Set<T> searchSuper(Class clazz, Set<T> parent) {
-        Class superClass = clazz.getSuperclass();
-        if (superClass != null && superClass != Object.class) {
-            parent.addAll(searchSuper(superClass.getSuperclass(), parent));
-        }
-        return parent;
-    }
 
     private Set<T> find(Class clazz) {
         Set<T> set = new HashSet<>();
         find0(clazz, set);
+
+        if (options.scanSuperClasses()) {
+            Class superclass = clazz.getSuperclass();
+            if (superclass != null && superclass != Object.class) {
+                set.addAll(find(superclass));
+            }
+        }
+        
         return ImmutableSet.copyOf(set);
     }
 
