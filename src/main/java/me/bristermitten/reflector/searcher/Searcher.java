@@ -44,7 +44,7 @@ public abstract class Searcher<T> {
     private Set<T> find(Class clazz) {
         Set<T> set = new HashSet<>();
         find0(clazz, set);
-        return (Set<T>) ImmutableSet.of(set);
+        return ImmutableSet.copyOf(set);
     }
 
     protected abstract void find0(Class clazz, Set<T> addTo);
