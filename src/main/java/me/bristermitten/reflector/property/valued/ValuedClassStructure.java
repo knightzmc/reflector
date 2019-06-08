@@ -2,11 +2,13 @@ package me.bristermitten.reflector.property.valued;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.google.inject.assistedinject.Assisted;
 import me.bristermitten.reflector.constructor.InstanceConstructor;
 import me.bristermitten.reflector.helper.ReflectionHelper;
 import me.bristermitten.reflector.property.Element;
 import me.bristermitten.reflector.property.Property;
+import me.bristermitten.reflector.property.info.Info;
 import me.bristermitten.reflector.property.structure.ClassStructure;
 
 import java.util.Map;
@@ -15,15 +17,17 @@ import java.util.WeakHashMap;
 
 public class ValuedClassStructure extends ClassStructure implements Element {
     private final Map<Property, Object> cachedPropertyValues = new WeakHashMap<>();
+
     private Object valuesFrom;
 
     @Inject
     public ValuedClassStructure(@Assisted Class type,
                                 @Assisted Set<Property> properties,
+                                @Assisted Info info,
                                 @Assisted Set<InstanceConstructor> constructors,
                                 @Assisted Object valuesFrom,
-                                ReflectionHelper helper) {
-        super(type, valuesFrom == null ? ImmutableSet.of() : properties, constructors, helper);
+                                Provider<ReflectionHelper> helper) {
+        super(type, valuesFrom == null ? ImmutableSet.of() : properties, info, constructors, helper);
         setValues(valuesFrom);
     }
 

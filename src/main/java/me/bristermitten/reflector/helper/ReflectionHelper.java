@@ -4,9 +4,12 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 import me.bristermitten.reflector.constructor.InstanceConstructor;
+import me.bristermitten.reflector.property.info.Info;
+import me.bristermitten.reflector.property.info.InfoFactory;
 import me.bristermitten.reflector.searcher.AccessorMatcher;
 import me.bristermitten.reflector.searcher.Searcher;
 import sun.misc.Unsafe;
@@ -53,6 +56,7 @@ public class ReflectionHelper {
                     .build();
     private final ArrayHelper<Annotation> helper = new ArrayHelper<>(Annotation.class);
     private final ArrayHelper<Constructor> constructorHelper = new ArrayHelper<>(Constructor.class);
+
     @Inject
     @Named("MethodSearcher")
     private Searcher methodSearcher;
@@ -60,6 +64,8 @@ public class ReflectionHelper {
     private AccessorMatcher matcher;
     @Inject
     private UnsafeHelper unsafeHelper;
+    @Inject
+    private Provider<InfoFactory> infoFactory;
 
     public <T> T invokeMethod(Method m, Object on, Object... args) {
         if (on == null || m == null) return null;
@@ -134,7 +140,7 @@ public class ReflectionHelper {
 
     /**
      * Check if a given type is a primitive or primitive wrapper
-     * First  checks the JDK {@link Class#isPrimitive()}, then falls back to a Set of all primitive and wrapper classes
+     * First checks the JDK {@link Class#isPrimitive()}, then falls back to a Set of all primitive and wrapper classes
      *
      * @param type The type to check
      * @return If the given type is primitive or a primitive wrapper
@@ -177,7 +183,8 @@ public class ReflectionHelper {
         Constructor[] constructors = constructorHelper.add(clazz.getConstructors(), clazz.getDeclaredConstructors());
         ImmutableSet.Builder<InstanceConstructor> builder = ImmutableSet.builder();
         for (Constructor constructor : constructors) {
-            builder.add(new InstanceConstructor<T>(constructor));
+            Info info = infoFactory.get().createInfo(constructor);
+            builder.add(new InstanceConstructor<T>(constructor, info));
         }
         return builder.build();
     }

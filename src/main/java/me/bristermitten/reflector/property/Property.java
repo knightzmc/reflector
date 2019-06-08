@@ -1,7 +1,8 @@
 package me.bristermitten.reflector.property;
 
 import me.bristermitten.reflector.annotation.ReflectorExpose;
-import me.bristermitten.reflector.property.info.PropertyInfo;
+import me.bristermitten.reflector.property.info.Info;
+import me.bristermitten.reflector.property.info.Informational;
 import me.bristermitten.reflector.property.setter.Setter;
 import me.bristermitten.reflector.property.structure.ClassStructure;
 import me.bristermitten.reflector.property.valued.ValuedClassStructure;
@@ -35,7 +36,7 @@ import org.jetbrains.annotations.Nullable;
  * {@link ClassStructure#getProperties()}, but will have a value if it is retrieved from
  * {@link ValuedClassStructure#getProperties()}
  */
-public interface Property extends Element {
+public interface Property extends Element, Informational {
 
     Object getValue(Object source);
 
@@ -49,5 +50,5 @@ public interface Property extends Element {
 
     boolean isComplexType();
 
-    PropertyInfo getInfo();
+    Info getInfo();
 }

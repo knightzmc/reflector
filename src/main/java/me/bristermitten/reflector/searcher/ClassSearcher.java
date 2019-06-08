@@ -14,6 +14,7 @@ import me.bristermitten.reflector.constructor.InstanceConstructor;
 import me.bristermitten.reflector.helper.ReflectionHelper;
 import me.bristermitten.reflector.property.Property;
 import me.bristermitten.reflector.property.PropertyFactory;
+import me.bristermitten.reflector.property.info.Info;
 import me.bristermitten.reflector.property.info.InfoFactory;
 import me.bristermitten.reflector.property.structure.ClassStructure;
 
@@ -65,8 +66,10 @@ public class ClassSearcher {
 
     private ClassStructure search0(Class clazz) {
         Set<Field> fields = fieldSearcher.search(clazz); //find all fields in class
-        Set<Property> properties = new TreeSet<>(Comparator.comparing(Property::getName));
+        Info info = factory.createInfo(clazz);
         Set<InstanceConstructor> constructors = constructorCache.getUnchecked(clazz);
+
+        Set<Property> properties = new TreeSet<>(Comparator.comparing(Property::getName));
         for (Field field : fields) {
             Optional<Method> getter = getterCache.getUnchecked(field); //workaround as guava's caches don't allow null values
             Optional<Method> setter = setterCache.getUnchecked(field);
@@ -74,7 +77,7 @@ public class ClassSearcher {
             if (property != null)
                 properties.add(property);
         }
-        return structureFactory.createStructure(clazz, ImmutableSet.copyOf(properties), constructors);
+        return structureFactory.createStructure(clazz, ImmutableSet.copyOf(properties), info, constructors);
     }
 
     private Property getProperty(Field field, Method getter, Method setter) {

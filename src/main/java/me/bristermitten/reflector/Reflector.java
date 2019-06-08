@@ -59,7 +59,7 @@ public class Reflector {
 
     public ValuedClassStructure assignValues(ClassStructure structure, Object valuesFrom) {
         return factory.createValuedStructure(structure.getType(),
-                structure.getProperties(), structure.getConstructors(), valuesFrom);
+                structure.getProperties(), structure.getInfo(), structure.getConstructors(), valuesFrom);
     }
 
     public ValuedClassStructure getValuedStructure(Object o) {

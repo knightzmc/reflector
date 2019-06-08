@@ -5,6 +5,7 @@ import me.bristermitten.reflector.helper.ArrayHelper;
 import me.bristermitten.reflector.helper.ReflectionHelper;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
@@ -18,19 +19,26 @@ public class InfoFactory {
         this.a = helper.annotationHelper();
     }
 
-    public PropertyInfo createInfo(Field f) {
-        return new PropertyInfo(a.add(
-                helper.getAnnotations(f)));
+    public Info createInfo(Constructor constructor) {
+        return new TypeInfo(helper.getAnnotations(constructor));
     }
 
-    public PropertyInfo createInfo(Field f, Method getter) {
-        return new PropertyInfo(a.add(
+    public Info createInfo(Class clazz) {
+        return new TypeInfo(helper.getAnnotations(clazz));
+    }
+
+    public Info createInfo(Field f) {
+        return new TypeInfo(helper.getAnnotations(f));
+    }
+
+    public Info createInfo(Field f, Method getter) {
+        return new TypeInfo(a.add(
                 helper.getAnnotations(f),
                 helper.getAnnotations(getter)));
     }
 
-    public PropertyInfo createInfo(Field f, Method getter, Method setter) {
-        return new PropertyInfo(a.add(
+    public Info createInfo(Field f, Method getter, Method setter) {
+        return new TypeInfo(a.add(
                 helper.getAnnotations(f),
                 helper.getAnnotations(getter),
                 helper.getAnnotations(setter)));

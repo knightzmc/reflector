@@ -1,12 +1,15 @@
 package me.bristermitten.reflector.property.structure;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.google.inject.assistedinject.Assisted;
 import lombok.Data;
 import me.bristermitten.reflector.constructor.InstanceConstructor;
 import me.bristermitten.reflector.constructor.NoConstructorExistsException;
 import me.bristermitten.reflector.helper.ReflectionHelper;
 import me.bristermitten.reflector.property.Property;
+import me.bristermitten.reflector.property.info.Info;
+import me.bristermitten.reflector.property.info.Informational;
 import me.bristermitten.reflector.property.info.search.PropertySearcher;
 import me.bristermitten.reflector.property.valued.ValuedClassStructure;
 
@@ -22,7 +25,7 @@ import java.util.Set;
  * wrapped with an Object's values to create a {@link ValuedClassStructure}
  */
 @Data
-public class ClassStructure {
+public class ClassStructure implements Informational {
     /**
      * The Class that this ClassStructure wraps. Ideally a Bean.
      */
@@ -33,30 +36,38 @@ public class ClassStructure {
      */
     private final Set<Property> properties;
 
-    private final ReflectionHelper helper;
-
     private final Set<InstanceConstructor> constructors;
+
+    private final Info info;
+
+    private final Provider<ReflectionHelper> helper;
 
     @Inject
     public ClassStructure(
             @Assisted Class type,
             @Assisted Set<Property> properties,
+            @Assisted Info info,
             @Assisted Set<InstanceConstructor> constructors,
-            ReflectionHelper helper) {
+            Provider<ReflectionHelper> helper) {
         this.type = type;
         this.properties = properties;
         this.constructors = constructors;
         this.helper = helper;
+        this.info = info;
     }
 
     public boolean isComplexType() {
-        return !helper.isSimple(type);
+        return !helper.get().isSimple(type);
     }
 
     public PropertySearcher searchProperties() {
         return new PropertySearcher(this);
     }
 
+    @Override
+    public Info getInfo() {
+        return info;
+    }
 
     public <T> T createInstance(Object... args) throws NoConstructorExistsException {
         Class[] argTypes = (Class[]) Arrays.stream(args).map(Object::getClass).toArray();

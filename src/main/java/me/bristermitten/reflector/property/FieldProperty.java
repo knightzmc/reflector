@@ -5,7 +5,8 @@ import com.google.inject.assistedinject.Assisted;
 import lombok.ToString;
 import me.bristermitten.reflector.Reflector;
 import me.bristermitten.reflector.helper.ReflectionHelper;
-import me.bristermitten.reflector.property.info.PropertyInfo;
+import me.bristermitten.reflector.property.info.Info;
+import me.bristermitten.reflector.property.info.TypeInfo;
 import me.bristermitten.reflector.property.setter.Setter;
 import me.bristermitten.reflector.property.setter.SetterFactory;
 
@@ -20,7 +21,7 @@ public class FieldProperty extends AbstractProperty {
                          Reflector reflector,
                          @Assisted String name,
                          @Assisted Field field,
-                         @Assisted PropertyInfo info) {
+                         @Assisted Info info) {
         super(helper, factory, reflector, name, field, null, null, info);
     }
 

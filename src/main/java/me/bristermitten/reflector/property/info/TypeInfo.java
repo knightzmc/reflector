@@ -3,10 +3,10 @@ package me.bristermitten.reflector.property.info;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 
-public class PropertyInfo {
+public class TypeInfo implements Info {
     private final Annotation[] annotations;
 
-    public PropertyInfo(Annotation[] annotations) {
+    public TypeInfo(Annotation[] annotations) {
         this.annotations = annotations;
     }
 
