@@ -1,11 +1,10 @@
 package me.bristermitten.reflector.searcher;
 
-import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import me.bristermitten.reflector.config.Options;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Set;
 
 public class FieldSearcher extends Searcher<Field> {
@@ -15,15 +14,12 @@ public class FieldSearcher extends Searcher<Field> {
     }
 
     @Override
-    protected Set<Field> find(Class clazz) {
-        ImmutableSet.Builder<Field> builder = ImmutableSet.builder();
-        builder.addAll(Arrays.asList(clazz.getDeclaredFields()));
-        builder.addAll(Arrays.asList(clazz.getFields()));
+    protected void find0(Class clazz, Set<Field> addTo) {
+        Collections.addAll(addTo, clazz.getDeclaredFields());
+        Collections.addAll(addTo, clazz.getFields());
         if (options.scanSuperClasses()) {
-            searchSuper(clazz, builder);
+            searchSuper(clazz, addTo);
         }
-        ImmutableSet<Field> fields = builder.build();
-        fields.removeIf(Field::isSynthetic);
-        return fields;
+        addTo.removeIf(Field::isSynthetic);
     }
 }

@@ -1,12 +1,10 @@
 package me.bristermitten.reflector.searcher;
 
-import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import me.bristermitten.reflector.config.Options;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Set;
 
 public class MethodSearcher extends Searcher<Method> {
@@ -19,16 +17,12 @@ public class MethodSearcher extends Searcher<Method> {
     }
 
     @Override
-    protected Set<Method> find(Class clazz) {
-        ImmutableSet.Builder<Method> builder = ImmutableSet.builder();
-        builder.addAll(Arrays.asList(clazz.getDeclaredMethods()));
-        builder.addAll(Arrays.asList(clazz.getMethods()));
-
+    protected void find0(Class clazz, Set<Method> addTo) {
+        Collections.addAll(addTo, clazz.getDeclaredMethods());
+        Collections.addAll(addTo, clazz.getMethods());
         if (options.scanSuperClasses()) {
-           searchSuper(clazz, builder);
+            searchSuper(clazz, addTo);
         }
-        ImmutableSet<Method> methods = builder.build();
-        methods.removeIf(Method::isSynthetic);
-        return methods;
+        addTo.removeIf(Method::isSynthetic);
     }
 }

@@ -7,6 +7,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import me.bristermitten.reflector.config.Options;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -32,13 +33,19 @@ public abstract class Searcher<T> {
         return cache.getUnchecked(clazz);
     }
 
-    protected Set<T> searchSuper(Class clazz, ImmutableSet.Builder<T> builder) {
+    protected Set<T> searchSuper(Class clazz, Set<T> parent) {
         Class superClass = clazz.getSuperclass();
         if (superClass != null && superClass != Object.class) {
-            builder.addAll(searchSuper(superClass.getSuperclass(), builder));
+            parent.addAll(searchSuper(superClass.getSuperclass(), parent));
         }
-        return builder.build();
+        return parent;
     }
 
-    protected abstract Set<T> find(Class clazz);
+    private Set<T> find(Class clazz) {
+        Set<T> set = new HashSet<>();
+        find0(clazz, set);
+        return (Set<T>) ImmutableSet.of(set);
+    }
+
+    protected abstract void find0(Class clazz, Set<T> addTo);
 }
