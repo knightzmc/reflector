@@ -2,6 +2,9 @@ package me.bristermitten.reflector.property.info.search;
 
 import me.bristermitten.reflector.property.Property;
 
+/**
+ * Search condition that matches a property name
+ */
 public class NameSearchCondition implements SearchCondition {
     private final String name;
 

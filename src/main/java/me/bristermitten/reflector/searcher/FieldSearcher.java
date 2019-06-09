@@ -7,6 +7,10 @@ import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.Set;
 
+/**
+ * Simple searcher that finds all fields in a class,
+ * except synthetic fields
+ */
 public class FieldSearcher extends Searcher<Field> {
     @Inject
     public FieldSearcher(Options options) {

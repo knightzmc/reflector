@@ -4,6 +4,9 @@ import me.bristermitten.reflector.property.Property;
 
 import java.util.function.Predicate;
 
+/**
+ * Implementation of {@link Predicate} used for searching properties in {@link PropertySearcher}
+ */
 public interface SearchCondition extends Predicate<Property> {
 
     @Override

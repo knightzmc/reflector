@@ -3,6 +3,7 @@ package me.bristermitten.reflector;
 import com.google.common.collect.ImmutableSet;
 import lombok.SneakyThrows;
 import me.bristermitten.reflector.helper.ReflectionHelper;
+import me.bristermitten.reflector.inject.ReflectorBindingModule;
 import me.bristermitten.reflector.util.TestEnum;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,8 +30,8 @@ public class ReflectionHelperTests {
 
     @Before
     public void init() {
-        Reflector reflector = new Reflector();
-        helper = reflector.helper();
+        ReflectorBindingModule module = new ReflectorBindingModule();
+        helper = module.createInjector().getInstance(ReflectionHelper.class);
     }
 
 

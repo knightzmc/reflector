@@ -6,6 +6,9 @@ import sun.misc.Unsafe;
 
 import java.lang.reflect.Field;
 
+/**
+ * Container for {@link Unsafe}
+ */
 @Singleton
 public class UnsafeHelper {
 

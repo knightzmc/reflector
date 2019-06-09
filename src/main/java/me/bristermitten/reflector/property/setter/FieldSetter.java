@@ -6,7 +6,10 @@ import me.bristermitten.reflector.helper.ReflectionHelper;
 
 import java.lang.reflect.Field;
 
-public class FieldSetter<V> implements Setter {
+/**
+ * Setter that directly sets the field value
+ */
+public class FieldSetter implements Setter {
     private final Field toSet;
     private final Object settingOn;
     private final ReflectionHelper helper;

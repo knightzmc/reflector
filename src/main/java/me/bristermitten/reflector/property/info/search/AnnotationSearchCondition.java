@@ -6,6 +6,9 @@ import me.bristermitten.reflector.property.info.Info;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 
+/**
+ * Search condition that matches any annotations on a property
+ */
 public class AnnotationSearchCondition implements SearchCondition {
     private final Class<? extends Annotation>[] types;
 

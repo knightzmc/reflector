@@ -36,7 +36,7 @@ import org.jetbrains.annotations.Nullable;
  * {@link ClassStructure#getProperties()}, but will have a value if it is retrieved from
  * {@link ValuedClassStructure#getProperties()}
  */
-public interface Property extends Element, Informational {
+public interface Property extends Element {
 
     Object getValue(Object source);
 
@@ -48,7 +48,4 @@ public interface Property extends Element, Informational {
 
     void setSource(Object source);
 
-    boolean isComplexType();
-
-    Info getInfo();
 }

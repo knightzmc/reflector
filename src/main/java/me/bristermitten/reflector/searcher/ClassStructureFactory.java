@@ -8,11 +8,33 @@ import me.bristermitten.reflector.property.valued.ValuedClassStructure;
 
 import java.util.Set;
 
+/**
+ * Guice-powered factory for assisted injection of ClassStructure types
+ */
 public interface ClassStructureFactory {
 
+    /**
+     * Create a new ClassStructure
+     *
+     * @param type         the class the structure wraps
+     * @param properties   the properties in the class
+     * @param info         info about the base class
+     * @param constructors any constructors the class has
+     * @return a new ClassStructure
+     */
     ClassStructure createStructure(Class type, Set<Property> properties,
                                    Info info, Set<InstanceConstructor> constructors);
 
+    /**
+     * Create a new ValuedClassStructure
+     *
+     * @param type         the class the structure wraps
+     * @param properties   the properties in the class
+     * @param info         info about the base class
+     * @param constructors any constructors the class has
+     * @param valuesFrom   an object to obtain values from for properties
+     * @return a new ValuedClassStructure
+     */
     ValuedClassStructure createValuedStructure(Class type, Set<Property> properties,
                                                Info info, Set<InstanceConstructor> constructors,
                                                Object valuesFrom);

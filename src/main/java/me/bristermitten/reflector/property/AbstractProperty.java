@@ -15,6 +15,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Set;
 
+/**
+ * Simple property implementation
+ */
 @ToString(exclude = {"reflector", "reflectionHelper", "factory"})
 public abstract class AbstractProperty implements Property {
     protected final Reflector reflector;

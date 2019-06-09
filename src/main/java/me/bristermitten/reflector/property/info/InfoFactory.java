@@ -9,6 +9,9 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+/**
+ * Factory for creating new instances of {@link Info}
+ */
 public class InfoFactory {
     private final ReflectionHelper helper;
     private final ArrayHelper<Annotation> a;

@@ -5,6 +5,9 @@ import me.bristermitten.reflector.property.Property;
 
 import java.util.Arrays;
 
+/**
+ * Search condition that matches property types
+ */
 public class TypeSearchCondition implements SearchCondition {
     private final Class[] types;
 

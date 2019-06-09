@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.assistedinject.Assisted;
+import me.bristermitten.reflector.config.Options;
 import me.bristermitten.reflector.constructor.InstanceConstructor;
 import me.bristermitten.reflector.helper.ReflectionHelper;
 import me.bristermitten.reflector.property.Element;
@@ -15,6 +16,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
 
+/**
+ * Extension of {@link ClassStructure} that maps properties with values from a given object
+ */
 public class ValuedClassStructure extends ClassStructure implements Element {
     private final Map<Property, Object> cachedPropertyValues = new WeakHashMap<>();
 
@@ -26,17 +30,23 @@ public class ValuedClassStructure extends ClassStructure implements Element {
                                 @Assisted Info info,
                                 @Assisted Set<InstanceConstructor> constructors,
                                 @Assisted Object valuesFrom,
-                                Provider<ReflectionHelper> helper) {
-        super(type, valuesFrom == null ? ImmutableSet.of() : properties, info, constructors, helper);
+                                Provider<ReflectionHelper> helper,
+                                Options options) {
+        super(type, valuesFrom == null ? ImmutableSet.of() : properties, info, constructors, helper, options);
         setValues(valuesFrom);
     }
 
+    /**
+     * Update all property values to be from a given object
+     *
+     * @param from the object to update
+     */
     public void setValues(Object from) {
         if (from == null) return;
         this.valuesFrom = from;
         getProperties().forEach(p -> {
-            cachedPropertyValues.put(p, p.getValue(from));
             p.setSource(from);
+            cachedPropertyValues.put(p, p.getValue());
         });
     }
 

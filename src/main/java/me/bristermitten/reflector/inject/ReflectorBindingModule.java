@@ -12,29 +12,30 @@ import me.bristermitten.reflector.property.setter.SetterFactory;
 import me.bristermitten.reflector.property.setter.SetterSetter;
 import me.bristermitten.reflector.searcher.*;
 
+/**
+ * Main Guice module for Reflector
+ */
 public class ReflectorBindingModule extends AbstractModule {
     private final Options options;
 
-    private Module customInjectModule;
-
+    /**
+     * Simple constructor that uses default options
+     */
     public ReflectorBindingModule() {
         this(Options.DEFAULT);
     }
 
+    /**
+     * Configures custom options
+     *
+     * @param options Options
+     */
     public ReflectorBindingModule(Options options) {
-        this(options, null);
-    }
-
-    public ReflectorBindingModule(Options options, Module customInjectModule) {
         this.options = options;
-        this.customInjectModule = customInjectModule;
     }
 
     @Override
     public void configure() {
-        if (customInjectModule != null)
-            install(customInjectModule);
-
         bind(Options.class).toInstance(options);
         bind(Searcher.class)
                 .annotatedWith(Names.named("FieldSearcher"))
@@ -68,7 +69,11 @@ public class ReflectorBindingModule extends AbstractModule {
 
     }
 
+    /**
+     * Create an Injector based on this module
+     * @return a new Injector
+     */
     public Injector createInjector() {
-        return Guice.createInjector( this);
+        return Guice.createInjector(this);
     }
 }

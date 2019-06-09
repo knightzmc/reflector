@@ -1,5 +1,8 @@
 package me.bristermitten.reflector.constructor;
 
+/**
+ * Simple runtime exception thrown if no constructor was found
+ */
 public class NoConstructorExistsException extends RuntimeException {
     public NoConstructorExistsException() {
     }

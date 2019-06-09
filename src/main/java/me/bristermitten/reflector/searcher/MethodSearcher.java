@@ -7,13 +7,15 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.Set;
 
+/**
+ * Simple searcher that finds all methods in a class,
+ * except synthetic methods
+ */
 public class MethodSearcher extends Searcher<Method> {
-    private final Options options;
 
     @Inject
     public MethodSearcher(Options options) {
         super(options);
-        this.options = options;
     }
 
     @Override

@@ -3,6 +3,9 @@ package me.bristermitten.reflector.property.info;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 
+/**
+ * Simple {@link Info} implementation
+ */
 public class TypeInfo implements Info {
     private final Annotation[] annotations;
 
