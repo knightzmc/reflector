@@ -15,6 +15,8 @@ import java.lang.reflect.Field;
 @ConfigurableInterface
 public interface NameDecider {
 
+    Class<NoChangeNameDecider> NoChange = NoChangeNameDecider.class;
+
     String makeName(Field field);
 
 
@@ -36,6 +38,16 @@ public interface NameDecider {
             }
             name = String.join(" ", parts);
             return name;
+        }
+    }
+
+    /**
+     * Preset implementation that makes no changes, and just returns the field name
+     */
+    class NoChangeNameDecider implements NameDecider {
+        @Override
+        public String makeName(Field field) {
+            return field.getName();
         }
     }
 }

@@ -1,5 +1,6 @@
 package me.bristermitten.reflector.config;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.Accessors;

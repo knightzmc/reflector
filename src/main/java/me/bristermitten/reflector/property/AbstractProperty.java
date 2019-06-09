@@ -30,8 +30,9 @@ public abstract class AbstractProperty implements Property {
     protected final @Nullable Method setterMethod;
     protected final @Nullable Method getterMethod;
     protected final Info info;
-    private Object source;
     private Setter setter;
+    private Object source;
+    private Object value;
 
     @Inject
     public AbstractProperty(ReflectionHelper reflectionHelper,
@@ -74,7 +75,9 @@ public abstract class AbstractProperty implements Property {
 
     @Override
     public Object getValue() {
-        return source == null ? null : getValue(source);
+        if (value != null) return value;
+        if (source == null) return null;
+        else return value = getValue(source);
     }
 
     @Override
@@ -89,7 +92,8 @@ public abstract class AbstractProperty implements Property {
     @Override
     public void setSource(Object source) {
         this.source = source;
-        setter = null; //remove setterMethod cached for the previous source
+        setter = null; //remove setter cached for the previous source
+        value = null; //and remove cached value
     }
 
     @Override
