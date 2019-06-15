@@ -14,7 +14,6 @@ import me.bristermitten.reflector.property.valued.ValuedClassStructure;
 import me.bristermitten.reflector.searcher.ClassSearcher;
 import me.bristermitten.reflector.searcher.ClassStructureFactory;
 
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -92,8 +91,7 @@ public class Reflector {
      * @return a ValuedClassStructure from the given data
      */
     public ValuedClassStructure assignValues(ClassStructure structure, Object valuesFrom) {
-        return factory.createValuedStructure(structure.getType(),
-                structure.getProperties(), structure.getInfo(), structure.getConstructors(), valuesFrom);
+        return factory.createValuedStructure(structure.getType(), structure.getProperties(), structure.getInfo(), structure.getConstructors(), valuesFrom);
     }
 
     /**

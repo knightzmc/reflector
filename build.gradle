@@ -1,15 +1,21 @@
-plugins {
-    id 'java'
-}
-
 group 'me.bristermitten'
 version '1.0-SNAPSHOT'
-
-sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
     jcenter()
+}
+
+allprojects {
+    apply plugin: 'java'
+    sourceCompatibility = 1.8
+    
+    dependencies {
+        implementation 'org.projectlombok:lombok:1.18.2'
+        annotationProcessor 'org.projectlombok:lombok:1.18.2'
+        testImplementation 'org.projectlombok:lombok:1.18.2'
+        testAnnotationProcessor 'org.projectlombok:lombok:1.18.2'
+    }
 }
 
 dependencies {
@@ -18,13 +24,6 @@ dependencies {
     compile 'org.jetbrains:annotations:17.0.0'
     compile 'org.slf4j:slf4j-api:1.8.0-beta4'
     compile 'org.slf4j:slf4j-simple:1.8.0-beta4'
-
-    //Lombok
-    compileOnly 'org.projectlombok:lombok:1.18.2'
-    annotationProcessor 'org.projectlombok:lombok:1.18.2'
-    testCompileOnly 'org.projectlombok:lombok:1.18.2'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.2'
-
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:2.27.0'
 }

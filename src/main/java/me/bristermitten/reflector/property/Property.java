@@ -1,8 +1,6 @@
 package me.bristermitten.reflector.property;
 
 import me.bristermitten.reflector.annotation.ReflectorExpose;
-import me.bristermitten.reflector.property.info.Info;
-import me.bristermitten.reflector.property.info.Informational;
 import me.bristermitten.reflector.property.setter.Setter;
 import me.bristermitten.reflector.property.structure.ClassStructure;
 import me.bristermitten.reflector.property.valued.ValuedClassStructure;
@@ -47,5 +45,7 @@ public interface Property extends Element {
     Object getSource();
 
     void setSource(Object source);
+
+    PropertyType getPropertyType();
 
 }

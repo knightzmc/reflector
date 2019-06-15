@@ -1,7 +1,8 @@
 package me.bristermitten.reflector.inject;
 
-import com.google.inject.Module;
-import com.google.inject.*;
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.name.Names;
 import me.bristermitten.reflector.config.Options;
@@ -64,8 +65,7 @@ public class ReflectorBindingModule extends AbstractModule {
                         FieldProperty.class)
                 .build(PropertyFactory.class));
 
-        install(new FactoryModuleBuilder()
-                .build(ClassStructureFactory.class));
+        install(new FactoryModuleBuilder().build(ClassStructureFactory.class));
 
     }
 

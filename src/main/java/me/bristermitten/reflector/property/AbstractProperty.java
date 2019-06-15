@@ -6,7 +6,6 @@ import lombok.ToString;
 import me.bristermitten.reflector.Reflector;
 import me.bristermitten.reflector.helper.ReflectionHelper;
 import me.bristermitten.reflector.property.info.Info;
-import me.bristermitten.reflector.property.info.TypeInfo;
 import me.bristermitten.reflector.property.setter.Setter;
 import me.bristermitten.reflector.property.setter.SetterFactory;
 import org.jetbrains.annotations.Nullable;
@@ -14,6 +13,8 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Set;
+
+import static me.bristermitten.reflector.property.PropertyType.*;
 
 /**
  * Simple property implementation
@@ -33,6 +34,7 @@ public abstract class AbstractProperty implements Property {
     private Setter setter;
     private Object source;
     private Object value;
+    private PropertyType propertyType;
 
     @Inject
     public AbstractProperty(ReflectionHelper reflectionHelper,
@@ -109,5 +111,17 @@ public abstract class AbstractProperty implements Property {
     @Override
     public boolean isSubTypeOf(Class type) {
         return type.isAssignableFrom(getType());
+    }
+
+    @Override
+    public PropertyType getPropertyType() {
+        if (propertyType != null) return propertyType; //lazy
+
+        if (isSubTypeOf(Number.class)) return propertyType = NUMBER;
+        if (isSubTypeOf(Character.class)) return propertyType = CHARACTER;
+        if (isSubTypeOf(CharSequence.class)) return propertyType = STRING;
+        if (isSubTypeOf(Boolean.class)) return propertyType = BOOLEAN;
+        if (isComplexType()) return propertyType = OBJECT;
+        return propertyType = UNKNOWN;
     }
 }

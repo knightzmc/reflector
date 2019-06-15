@@ -1,3 +1,4 @@
 rootProject.name = 'reflector'
 include 'examples'
+include 'examples'
 

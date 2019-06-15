@@ -12,7 +12,7 @@ import java.util.Set;
  */
 public interface Element extends Informational {
     /**
-     * @return the type of the element
+     * @return the type of the element. The type will never be primitive, it will always be a boxed type
      */
     Class getType();
 
