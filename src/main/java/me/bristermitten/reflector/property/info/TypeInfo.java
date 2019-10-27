@@ -21,9 +21,11 @@ public class TypeInfo implements Info {
         return Arrays.stream(annotations).map(Annotation::annotationType).anyMatch(clazz::equals);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <A extends Annotation> A getAnnotation(Class<A> clazz) {
-        return (A) Arrays.stream(annotations).filter(a -> a.annotationType().equals(clazz))
+        return (A) Arrays.stream(annotations)
+                .filter(a -> a.annotationType().equals(clazz))
                 .findAny().orElse(null);
     }
 }

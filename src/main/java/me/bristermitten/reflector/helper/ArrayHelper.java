@@ -19,6 +19,7 @@ public class ArrayHelper<T> {
         this.type = type;
     }
 
+    @SuppressWarnings("unchecked")
     @SafeVarargs
     public static <T> T[] add(Class<T> type, T[]... ts) {
         Set<T> set = new HashSet<>();

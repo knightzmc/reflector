@@ -45,7 +45,7 @@ public class InstanceConstructor<T> implements Informational {
      * @param types types to compare
      * @return if the types are equal
      */
-    public boolean argsMatches(Class... types) {
+    public boolean argsMatches(Class<?>... types) {
         Class<?>[] parameterTypes = constructor.getParameterTypes();
         for (int i = 0; i < parameterTypes.length; i++) {
             Class<?> parameterType = parameterTypes[i];

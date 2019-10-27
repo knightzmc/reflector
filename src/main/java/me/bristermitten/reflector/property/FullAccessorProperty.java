@@ -16,6 +16,7 @@ import java.util.Objects;
 
 @ToString(callSuper = true)
 public class FullAccessorProperty extends AbstractProperty {
+
     @Inject
     public FullAccessorProperty(ReflectionHelper helper,
                                 SetterFactory factory,

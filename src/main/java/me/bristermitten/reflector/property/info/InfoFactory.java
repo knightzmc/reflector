@@ -22,11 +22,11 @@ public class InfoFactory {
         this.a = helper.annotationHelper();
     }
 
-    public Info createInfo(Constructor constructor) {
+    public Info createInfo(Constructor<?> constructor) {
         return new TypeInfo(helper.getAnnotations(constructor));
     }
 
-    public Info createInfo(Class clazz) {
+    public Info createInfo(Class<?> clazz) {
         return new TypeInfo(helper.getAnnotations(clazz));
     }
 

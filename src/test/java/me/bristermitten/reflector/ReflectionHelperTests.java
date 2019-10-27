@@ -21,7 +21,7 @@ import static org.mockito.Mockito.verify;
 
 public class ReflectionHelperTests {
     private ReflectionHelper helper;
-    private Set<Class> primitives = ImmutableSet.of(
+    private Set<Class<?>> primitives = ImmutableSet.of(
             boolean.class, char.class, byte.class, short.class, int.class,
             long.class, float.class, double.class, void.class, Boolean.class, Character.class,
             Byte.class, Short.class, Integer.class, Long.class, Float.class, Double.class,
@@ -37,7 +37,7 @@ public class ReflectionHelperTests {
 
     @Test
     public void testReflection_isPrimitive_returnsTrue() {
-        for (Class clazz : primitives) {
+        for (Class<?> clazz : primitives) {
             assertTrue(helper.isPrimitive(clazz));
         }
     }
@@ -46,7 +46,7 @@ public class ReflectionHelperTests {
     public void testReflection_isSimple_returnsTrue() {
         assertTrue(helper.isSimple(String.class));
         assertTrue(helper.isSimple(TestEnum.class));
-        for (Class clazz : primitives) {
+        for (Class<?> clazz : primitives) {
             assertTrue(helper.isSimple(clazz));
         }
     }
@@ -70,16 +70,15 @@ public class ReflectionHelperTests {
 
     @Test
     public void testReflection_represents_returnsTrueWhenRepresents() {
-        final Class primClass = int.class;
-        final Class wrappedClass = Integer.class;
+        final Class<?> primClass = int.class;
+        final Class<?> wrappedClass = Integer.class;
         assertTrue(helper.represents(primClass, wrappedClass));
         assertFalse(helper.represents(primClass, String.class));
     }
 
 
     @Test
-    @SneakyThrows
-    public void testReflection_getAnnotations_findCorrectly() {
+    public void testReflection_getAnnotations_findCorrectly() throws NoSuchFieldException {
         TestAnnotationClass testAnnotationClass = new TestAnnotationClass();
         Field field = testAnnotationClass.getClass().getDeclaredField("test");
         Annotation[] annotations = helper.getAnnotations(field);

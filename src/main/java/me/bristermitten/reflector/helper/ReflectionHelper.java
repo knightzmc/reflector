@@ -37,8 +37,8 @@ public class ReflectionHelper {
             Short.class, Void.class
     );
 
-    private static final BiMap<Class, Class> PRIMITIVES_TO_WRAPPERS =
-            ImmutableBiMap.<Class, Class>builder()
+    private static final BiMap<Class<?>, Class<?>> PRIMITIVES_TO_WRAPPERS =
+            ImmutableBiMap.<Class<?>, Class<?>>builder()
                     .put(boolean.class, Boolean.class)
                     .put(byte.class, Byte.class)
                     .put(char.class, Character.class)
@@ -50,11 +50,12 @@ public class ReflectionHelper {
                     .put(void.class, Void.class)
                     .build();
     private final ArrayHelper<Annotation> helper = new ArrayHelper<>(Annotation.class);
+    @SuppressWarnings("rawtypes")
     private final ArrayHelper<Constructor> constructorHelper = new ArrayHelper<>(Constructor.class);
 
     @Inject
     @Named("MethodSearcher")
-    private Searcher methodSearcher;
+    private Searcher<Method> methodSearcher;
     @Inject
     private AccessorMatcher matcher;
     @Inject
@@ -73,6 +74,7 @@ public class ReflectionHelper {
      * @param <T>  the type that the method returns
      * @return the method's return value, or null if anything went wrong
      */
+    @SuppressWarnings("unchecked")
     public <T> T invokeMethod(Method m, Object on, Object... args) {
         if (on == null || m == null) return null;
         try {
@@ -93,6 +95,7 @@ public class ReflectionHelper {
      * @param <T> the type of the field
      * @return the field value, or null if anything went wrong
      */
+    @SuppressWarnings("unchecked")
     public <T> T getFieldValue(Field f, Object on) {
         try {
             f.setAccessible(true);
@@ -137,7 +140,7 @@ public class ReflectionHelper {
      * @param args     the arguments of the method
      * @return the method if found, or null if no method was found or something went wrong
      */
-    public Method getMethod(Class declarer, String name, Class... args) {
+    public Method getMethod(Class<?> declarer, String name, Class<?>... args) {
         Method method = null;
         try {
             method = declarer.getMethod(name, args);
@@ -215,7 +218,7 @@ public class ReflectionHelper {
      * @param type  the primitive or boxed class to check
      * @return if the given class represents a primitive class of {type}
      */
-    public boolean represents(Class clazz, Class type) {
+    public boolean represents(Class<?> clazz, Class<?> type) {
         if (!isPrimitive(type)) return false;
         if (!isPrimitive(clazz)) return false;
         if (clazz == type) return true;
@@ -230,12 +233,12 @@ public class ReflectionHelper {
      * @param clazz the class to get constructors in
      * @return an ImmutableSet of all constructors
      */
-    public Set<InstanceConstructor> getConstructors(Class clazz) {
-        Constructor[] constructors = constructorHelper.add(clazz.getConstructors(), clazz.getDeclaredConstructors());
-        ImmutableSet.Builder<InstanceConstructor> builder = ImmutableSet.builder();
-        for (Constructor constructor : constructors) {
+    public Set<InstanceConstructor<?>> getConstructors(Class<?> clazz) {
+        Constructor<?>[] constructors = constructorHelper.add(clazz.getConstructors(), clazz.getDeclaredConstructors());
+        ImmutableSet.Builder<InstanceConstructor<?>> builder = ImmutableSet.builder();
+        for (Constructor<?> constructor : constructors) {
             Info info = infoFactory.get().createInfo(constructor);
-            builder.add(new InstanceConstructor(constructor, info, options.lenientConstructorSearch()));
+            builder.add(new InstanceConstructor<>(constructor, info, options.lenientConstructorSearch()));
         }
         return builder.build();
     }

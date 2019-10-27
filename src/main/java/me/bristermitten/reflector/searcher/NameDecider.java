@@ -19,9 +19,8 @@ public interface NameDecider {
 
     String makeName(Field field);
 
-
-    /*
-            DEFAULT IMPLEMENTATION
+    /**
+     * Default Implementation of {@link NameDecider}
      */
     class DefaultNameDecider implements NameDecider {
 

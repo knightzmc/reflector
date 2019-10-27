@@ -13,9 +13,8 @@ import java.lang.reflect.Method;
  * A SetterSetter implements {@link Setter}, encapsulating {@link Setter#set(Object)}
  * with a Setter method which will be called to set a value
  *
- * @param <V>
  */
-public class SetterSetter<V> implements Setter {
+public class SetterSetter implements Setter {
     private final Method setter;
     private final Object setOn;
     private final ReflectionHelper helper;

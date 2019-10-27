@@ -18,12 +18,7 @@ public class OptionsBuilder {
     private Class<? extends NameDecider> nameDecider = DefaultNameDecider.class;
 
     public Options build() {
-        return new Options(
-                accessorMatcher,
-                nameDecider,
-                accessLevel,
-                scanSuperClasses,
-                lenientConstructorSearch
+        return new Options(accessorMatcher, nameDecider, accessLevel, scanSuperClasses, lenientConstructorSearch
         );
     }
 
