@@ -19,6 +19,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 import java.util.Optional;
 import java.util.Set;
+import java.util.logging.Logger;
 
 /**
  * Helper class for various reflective operations
@@ -123,12 +124,15 @@ public class ReflectionHelper {
         try {
             f.set(on, newValue);
         } catch (IllegalAccessException e) {
+            Logger.getLogger("Reflector").warning("Accessing field " +
+                    f.toString() + " threw IllegalAccessException, using Unsafe to set value");
             //let's try unsafe!
             Unsafe unsafe = unsafeHelper.getUnsafe();
             long offset = unsafe.objectFieldOffset(f);
             unsafe.putObject(on, offset, newValue);
+        } finally {
+            f.setAccessible(false);
         }
-        f.setAccessible(false);
         return previous;
     }
 
