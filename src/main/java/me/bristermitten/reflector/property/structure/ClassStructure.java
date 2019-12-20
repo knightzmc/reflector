@@ -144,4 +144,13 @@ public class ClassStructure implements Informational {
         return () -> new NoConstructorExistsException(String.format(
                 "No constructor found for %s with parameters %s", type, Arrays.toString(types)));
     }
+
+
+    public boolean isSubTypeOf(Class<?> superType) {
+        return superType.isAssignableFrom(type);
+    }
+
+    public boolean isSuperTypeOf(Class<?> subType) {
+        return type.isAssignableFrom(subType);
+    }
 }
