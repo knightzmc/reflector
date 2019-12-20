@@ -1,7 +1,5 @@
 package me.bristermitten.reflector.property.setter;
 
-import com.google.inject.name.Named;
-
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -10,11 +8,8 @@ import java.lang.reflect.Method;
  * Guice assisted injection factory for creating setters
  */
 public interface SetterFactory {
-    @Named("FieldSetter")
-    Setter createFieldSetter(Field toSet,
-                             @Nullable Object settingOn);
 
-    @Named("SetterSetter")
-    Setter createSetterSetter(Method setter,
-                              @Nullable Object setting);
+    FieldSetter createFieldSetter(Field toSet, @Nullable Object settingOn);
+
+    SetterSetter createSetterSetter(Method setter, @Nullable Object setting);
 }

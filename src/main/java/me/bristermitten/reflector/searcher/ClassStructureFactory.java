@@ -23,8 +23,9 @@ public interface ClassStructureFactory {
      * @param constructors any constructors the class has
      * @return a new ClassStructure
      */
-    ClassStructure createStructure(Class type, Set<Property> properties,
-                                   Info info, Set<InstanceConstructor> constructors);
+    ClassStructure createStructure(Class<?> type, Set<Property> properties,
+                                   Info info, Set<InstanceConstructor<?>> constructors,
+                                   boolean isFullClass);
 
     /**
      * Create a new ValuedClassStructure
@@ -36,7 +37,8 @@ public interface ClassStructureFactory {
      * @param valuesFrom   an object to obtain values from for properties
      * @return a new ValuedClassStructure
      */
-    ValuedClassStructure createValuedStructure(Class type, Set<Property> properties,
-                                               Info info, Set<InstanceConstructor> constructors,
-                                               @Nullable Object valuesFrom);
+    ValuedClassStructure createValuedStructure(Class<?> type, Set<Property> properties,
+                                               Info info, Set<InstanceConstructor<?>> constructors,
+                                               @Nullable Object valuesFrom,
+                                               boolean isFullClass);
 }

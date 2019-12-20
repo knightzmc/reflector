@@ -19,7 +19,7 @@ public class MethodSearcher extends Searcher<Method> {
     }
 
     @Override
-    protected void find0(Class clazz, Set<Method> addTo) {
+    protected void find0(Class<?> clazz, Set<Method> addTo) {
         Collections.addAll(addTo, clazz.getDeclaredMethods());
         Collections.addAll(addTo, clazz.getMethods());
         addTo.removeIf(Method::isSynthetic);

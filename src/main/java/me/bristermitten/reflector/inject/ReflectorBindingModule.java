@@ -38,6 +38,7 @@ public class ReflectorBindingModule extends AbstractModule {
     @Override
     public void configure() {
         bind(Options.class).toInstance(options);
+
         bind(Searcher.class)
                 .annotatedWith(Names.named("FieldSearcher"))
                 .to(FieldSearcher.class);
@@ -50,19 +51,9 @@ public class ReflectorBindingModule extends AbstractModule {
         bind(NameDecider.class).to(options.nameDeciderClass());
 
         install(new FactoryModuleBuilder()
-                .implement(Setter.class, Names.named("FieldSetter"),
-                        FieldSetter.class)
-                .implement(Setter.class, Names.named("SetterSetter"),
-                        SetterSetter.class)
                 .build(SetterFactory.class));
 
         install(new FactoryModuleBuilder()
-                .implement(Property.class, Names.named("FullAccessorProperty"),
-                        FullAccessorProperty.class)
-                .implement(Property.class, Names.named("GetterProperty"),
-                        GetterProperty.class)
-                .implement(Property.class, Names.named("FieldProperty"),
-                        FieldProperty.class)
                 .build(PropertyFactory.class));
 
         install(new FactoryModuleBuilder().build(ClassStructureFactory.class));

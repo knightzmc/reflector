@@ -22,7 +22,7 @@ import java.util.Set;
  */
 public abstract class Searcher<T> {
     protected final Options options;
-    private final LoadingCache<Class, Set<T>> cache;
+    private final LoadingCache<Class<?>, Set<T>> cache;
 
     @Inject
     protected Searcher(Options options) {
@@ -38,7 +38,7 @@ public abstract class Searcher<T> {
      * @param clazz the class to search
      * @return an ImmutableSet containing the found data
      */
-    public Set<T> search(Class clazz) {
+    public Set<T> search(Class<?> clazz) {
         return cache.getUnchecked(clazz);
     }
 
@@ -50,12 +50,12 @@ public abstract class Searcher<T> {
      * @param clazz the class to search
      * @return an ImmutableSet of all found data
      */
-    private Set<T> find(Class clazz) {
+    private Set<T> find(Class<?> clazz) {
         Set<T> set = new HashSet<>();
         find0(clazz, set);
 
         if (options.scanSuperClasses()) {
-            Class superclass = clazz.getSuperclass();
+            Class<?> superclass = clazz.getSuperclass();
             if (superclass != null && superclass != Object.class) {
                 set.addAll(find(superclass));
             }
@@ -72,5 +72,5 @@ public abstract class Searcher<T> {
      * @param clazz The class to search
      * @param addTo a set that all data should be added to
      */
-    protected abstract void find0(Class clazz, Set<T> addTo);
+    protected abstract void find0(Class<?> clazz, Set<T> addTo);
 }

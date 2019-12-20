@@ -12,13 +12,14 @@ import java.util.Set;
  * except synthetic fields
  */
 public class FieldSearcher extends Searcher<Field> {
+
     @Inject
     public FieldSearcher(Options options) {
         super(options);
     }
 
     @Override
-    protected void find0(Class clazz, Set<Field> addTo) {
+    protected void find0(Class<?> clazz, Set<Field> addTo) {
         Collections.addAll(addTo, clazz.getDeclaredFields());
         Collections.addAll(addTo, clazz.getFields());
         addTo.removeIf(Field::isSynthetic);

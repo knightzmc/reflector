@@ -1,7 +1,6 @@
 package me.bristermitten.reflector.property.valued;
 
 import com.google.inject.Inject;
-import com.google.inject.Provider;
 import com.google.inject.assistedinject.Assisted;
 import me.bristermitten.reflector.annotation.Nullable;
 import me.bristermitten.reflector.config.Options;
@@ -24,14 +23,15 @@ public class ValuedClassStructure extends ClassStructure implements Element {
     private Object valuesFrom;
 
     @Inject
-    public ValuedClassStructure(@Assisted Class type,
+    public ValuedClassStructure(@Assisted Class<?> type,
                                 @Assisted Set<Property> properties,
                                 @Assisted Info info,
-                                @Assisted Set<InstanceConstructor> constructors,
+                                @Assisted Set<InstanceConstructor<?>> constructors,
                                 @Nullable @Assisted Object valuesFrom,
-                                Provider<ReflectionHelper> helper,
+                                @Assisted boolean fullClass,
+                                ReflectionHelper helper,
                                 Options options) {
-        super(type, properties, info, constructors, helper, options);
+        super(type, properties, info, constructors, fullClass, helper, options);
 
         setValues(valuesFrom);
     }
@@ -55,7 +55,7 @@ public class ValuedClassStructure extends ClassStructure implements Element {
     }
 
     @Override
-    public boolean isSubTypeOf(Class type) {
+    public boolean isSubTypeOf(Class<?> type) {
         return type.isAssignableFrom(getType());
     }
 

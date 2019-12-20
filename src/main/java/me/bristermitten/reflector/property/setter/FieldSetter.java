@@ -16,8 +16,9 @@ public class FieldSetter implements Setter {
     private Object cachedValue;
 
     @Inject
-    public FieldSetter(ReflectionHelper helper,
-                       @Assisted Field toSet, @Assisted Object settingOn) {
+    public FieldSetter(@Assisted Field toSet,
+                       @Assisted Object settingOn,
+                       ReflectionHelper helper) {
         this.toSet = toSet;
         this.settingOn = settingOn;
         this.helper = helper;

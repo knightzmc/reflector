@@ -14,7 +14,7 @@ public interface Element extends Informational {
     /**
      * @return the type of the element. The type will never be primitive, it will always be a boxed type
      */
-    Class getType();
+    Class<?> getType();
 
     /**
      * @return if the element is a complex type
@@ -41,5 +41,5 @@ public interface Element extends Informational {
      * @param type the type to check
      * @return if the element is a subclass of a given type
      */
-    boolean isSubTypeOf(Class type);
+    boolean isSubTypeOf(Class<?> type);
 }

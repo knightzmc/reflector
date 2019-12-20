@@ -31,9 +31,9 @@ import java.util.TreeSet;
 public class ClassSearcher {
     private final Options options;
     private final FieldSearcher fieldSearcher;
-    private final LoadingCache<Class, ClassStructure> structureCache;
+    private final LoadingCache<Class<?>, ClassStructure> structureCache;
     private final LoadingCache<Field, Optional<Method>> getterCache, setterCache;
-    private final LoadingCache<Class, Set<InstanceConstructor>> constructorCache;
+    private final LoadingCache<Class<?>, Set<InstanceConstructor<?>>> constructorCache;
     private final PropertyFactory propertyFactory;
     private final ClassStructureFactory structureFactory;
     private final NameDecider decider;
@@ -55,11 +55,11 @@ public class ClassSearcher {
         this.decider = decider;
         this.factory = factory;
 
-        CacheBuilder cacheBuilder = CacheBuilder.newBuilder();
-        structureCache = cacheBuilder.build(CacheLoader.from(this::search0));
-        getterCache = cacheBuilder.build(CacheLoader.from(reflectionHelper::getGetterFor));
-        setterCache = cacheBuilder.build(CacheLoader.from(reflectionHelper::getSetterFor));
-        constructorCache = cacheBuilder.build(CacheLoader.from(reflectionHelper::getConstructors));
+        CacheBuilder<Object, Object> builder = CacheBuilder.newBuilder();
+        structureCache = builder.build(CacheLoader.from(this::search0));
+        getterCache = builder.build(CacheLoader.from(reflectionHelper::getGetterFor));
+        setterCache = builder.build(CacheLoader.from(reflectionHelper::getSetterFor));
+        constructorCache = builder.build(CacheLoader.from(reflectionHelper::getConstructors));
     }
 
     /**
@@ -68,7 +68,7 @@ public class ClassSearcher {
      * @param clazz class to scan
      * @return a matching ClassStructure
      */
-    public ClassStructure search(Class clazz) {
+    public ClassStructure search(Class<?> clazz) {
         return structureCache.getUnchecked(clazz);
     }
 
@@ -78,11 +78,11 @@ public class ClassSearcher {
      * @param clazz class to scan
      * @return a matching ClassStructure
      */
-    private ClassStructure search0(Class clazz) {
+    private ClassStructure search0(Class<?> clazz) {
         //scan annotations and other info of the class
         Info info = factory.createInfo(clazz);
         //get or find constructors
-        Set<InstanceConstructor> constructors = constructorCache.getUnchecked(clazz);
+        Set<InstanceConstructor<?>> constructors = constructorCache.getUnchecked(clazz);
 
         //create a new sorted set to contain all properties
         Set<Property> properties = new TreeSet<>(Comparator.comparing(Property::getName));
@@ -95,8 +95,10 @@ public class ClassSearcher {
             if (property != null)
                 properties.add(property);
         }
+        boolean fullClass = !clazz.isMemberClass() && !clazz.isLocalClass() && !clazz.isAnonymousClass();
+
         //assisted inject the searched data into a new structure
-        return structureFactory.createStructure(clazz, ImmutableSet.copyOf(properties), info, constructors);
+        return structureFactory.createStructure(clazz, ImmutableSet.copyOf(properties), info, constructors, fullClass);
     }
 
     /**
@@ -111,8 +113,8 @@ public class ClassSearcher {
         String name = decider.makeName(field);
 
         if (getter != null && setter != null) {
-            return propertyFactory.createProperty(name, field, getter, setter,
-                    factory.createInfo(field, getter, setter));
+            Info info = factory.createInfo(field, getter, setter);
+            return propertyFactory.createProperty(name, field, info, getter, setter);
         }
 
         if (getter != null) {

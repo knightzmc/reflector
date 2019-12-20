@@ -23,25 +23,25 @@ public class InfoFactory {
     }
 
     public Info createInfo(Constructor<?> constructor) {
-        return new TypeInfo(helper.getAnnotations(constructor));
+        return new SimpleElementInfo(helper.getAnnotations(constructor));
     }
 
     public Info createInfo(Class<?> clazz) {
-        return new TypeInfo(helper.getAnnotations(clazz));
+        return new SimpleElementInfo(helper.getAnnotations(clazz));
     }
 
     public Info createInfo(Field f) {
-        return new TypeInfo(helper.getAnnotations(f));
+        return new SimpleElementInfo(helper.getAnnotations(f));
     }
 
     public Info createInfo(Field f, Method getter) {
-        return new TypeInfo(a.add(
+        return new SimpleElementInfo(a.add(
                 helper.getAnnotations(f),
                 helper.getAnnotations(getter)));
     }
 
     public Info createInfo(Field f, Method getter, Method setter) {
-        return new TypeInfo(a.add(
+        return new SimpleElementInfo(a.add(
                 helper.getAnnotations(f),
                 helper.getAnnotations(getter),
                 helper.getAnnotations(setter)));

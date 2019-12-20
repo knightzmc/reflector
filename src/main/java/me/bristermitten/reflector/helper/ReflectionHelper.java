@@ -12,6 +12,7 @@ import me.bristermitten.reflector.constructor.InstanceConstructor;
 import me.bristermitten.reflector.property.info.Info;
 import me.bristermitten.reflector.property.info.InfoFactory;
 import me.bristermitten.reflector.searcher.AccessorMatcher;
+import me.bristermitten.reflector.searcher.MethodSearcher;
 import me.bristermitten.reflector.searcher.Searcher;
 import sun.misc.Unsafe;
 
@@ -50,13 +51,14 @@ public class ReflectionHelper {
                     .put(short.class, Short.class)
                     .put(void.class, Void.class)
                     .build();
+
     private final ArrayHelper<Annotation> helper = new ArrayHelper<>(Annotation.class);
+
     @SuppressWarnings("rawtypes")
     private final ArrayHelper<Constructor> constructorHelper = new ArrayHelper<>(Constructor.class);
 
     @Inject
-    @Named("MethodSearcher")
-    private Searcher<Method> methodSearcher;
+    private MethodSearcher methodSearcher;
     @Inject
     private AccessorMatcher matcher;
     @Inject

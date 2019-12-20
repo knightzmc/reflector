@@ -6,7 +6,6 @@ import com.google.inject.Singleton;
 import me.bristermitten.reflector.config.Options;
 import me.bristermitten.reflector.constructor.InstanceConstructor;
 import me.bristermitten.reflector.constructor.NoConstructorExistsException;
-import me.bristermitten.reflector.helper.ReflectionHelper;
 import me.bristermitten.reflector.inject.ReflectorBindingModule;
 import me.bristermitten.reflector.property.structure.ClassStructure;
 import me.bristermitten.reflector.property.structure.Null;
@@ -30,9 +29,6 @@ public class Reflector {
 
     @Inject
     private ClassSearcher searcher;
-
-    @Inject
-    private ReflectionHelper reflectionHelper;
 
     @Inject
     private ClassStructureFactory factory;
@@ -60,7 +56,7 @@ public class Reflector {
      * @param clazz the class to create a structure of
      * @return a ClassStructure of the given class
      */
-    public ClassStructure getStructure(Class clazz) {
+    public ClassStructure getStructure(Class<?> clazz) {
         return searcher.search(clazz);
     }
 
@@ -72,9 +68,9 @@ public class Reflector {
      * @return an ImmutableSet containing structures of the classes
      * @see Reflector#getStructure(Class)
      */
-    public Set<ClassStructure> getStructures(Class... classes) {
+    public Set<ClassStructure> getStructures(Class<?>... classes) {
         ImmutableSet.Builder<ClassStructure> builder = ImmutableSet.builder();
-        for (Class c : classes) {
+        for (Class<?> c : classes) {
             builder.add(getStructure(c));
         }
         return builder.build();
@@ -91,7 +87,8 @@ public class Reflector {
      * @return a ValuedClassStructure from the given data
      */
     public ValuedClassStructure assignValues(ClassStructure structure, Object valuesFrom) {
-        return factory.createValuedStructure(structure.getType(), structure.getProperties(), structure.getInfo(), structure.getConstructors(), valuesFrom);
+        return factory.createValuedStructure(structure.getType(), structure.getProperties(), structure.getInfo(),
+                structure.getConstructors(), valuesFrom, structure.isFullClass());
     }
 
     /**
@@ -119,7 +116,7 @@ public class Reflector {
      * @return an InstanceConstructor matching the specification if any exists or
      * @throws NoConstructorExistsException if no constructor matches the argument types
      */
-    public <T> InstanceConstructor<T> construct(Class<T> tClass, Class... args) throws NoConstructorExistsException {
+    public <T> InstanceConstructor<T> construct(Class<T> tClass, Class<?>... args) throws NoConstructorExistsException {
         return construct(getStructure(tClass), args);
     }
 
@@ -133,7 +130,7 @@ public class Reflector {
      * @return an InstanceConstructor matching the specification if any exists or
      * @throws NoConstructorExistsException if no constructor matches the argument types
      */
-    public <T> InstanceConstructor<T> construct(ClassStructure structure, Class... args) throws NoConstructorExistsException {
+    public <T> InstanceConstructor<T> construct(ClassStructure structure, Class<?>... args) throws NoConstructorExistsException {
         return structure.constructorFor(args);
     }
 

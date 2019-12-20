@@ -1,5 +1,7 @@
 package me.bristermitten.reflector.property.info;
 
+import me.bristermitten.reflector.annotation.Nullable;
+
 import java.lang.annotation.Annotation;
 
 /**
@@ -23,5 +25,6 @@ public interface Info {
      * @param <A>   the annotation type
      * @return an annotation if present on the {@link Informational}, otherwise null
      */
+    @Nullable
     <A extends Annotation> A getAnnotation(Class<A> clazz);
 }

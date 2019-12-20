@@ -1,7 +1,6 @@
 package me.bristermitten.reflector.property.structure;
 
 import com.google.inject.Inject;
-import com.google.inject.Provider;
 import com.google.inject.assistedinject.Assisted;
 import lombok.Data;
 import me.bristermitten.reflector.config.Options;
@@ -15,7 +14,6 @@ import me.bristermitten.reflector.property.info.search.PropertySearcher;
 import me.bristermitten.reflector.property.valued.ValuedClassStructure;
 
 import java.util.Arrays;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
 
@@ -31,35 +29,44 @@ public class ClassStructure implements Informational {
     /**
      * The Class that this ClassStructure wraps. Ideally a Bean.
      */
-    private final Class type;
+    private final Class<?> type;
     /**
      * An immutable set of all of the properties (wrapped fields and/or accessors)
      * of {@link ClassStructure#type}
      */
     private final Set<Property> properties;
 
-    private final Set<InstanceConstructor> constructors;
+    private final Set<InstanceConstructor<?>> constructors;
 
     private final Info info;
 
-    private final Provider<ReflectionHelper> helper;
+    private final ReflectionHelper helper;
 
     private final Options options;
 
+    /**
+     * If this class is a full class
+     * That is, not a member or inner class
+     */
+    private final boolean fullClass;
+
     @Inject
     public ClassStructure(
-            @Assisted Class type,
+            @Assisted Class<?> type,
             @Assisted Set<Property> properties,
             @Assisted Info info,
-            @Assisted Set<InstanceConstructor> constructors,
-            Provider<ReflectionHelper> helper,
-            Options options) {
+            @Assisted Set<InstanceConstructor<?>> constructors,
+            @Assisted boolean fullClass,
+            ReflectionHelper helper,
+            Options options
+    ) {
         this.type = type;
         this.properties = properties;
         this.info = info;
         this.constructors = constructors;
         this.helper = helper;
         this.options = options;
+        this.fullClass = fullClass;
     }
 
     /**
@@ -67,7 +74,7 @@ public class ClassStructure implements Informational {
      * @see ReflectionHelper#isSimple(Class)
      */
     public boolean isComplexType() {
-        return !helper.get().isSimple(type);
+        return !helper.isSimple(type);
     }
 
     /**
@@ -94,7 +101,13 @@ public class ClassStructure implements Informational {
      * @see InstanceConstructor#create(Object...)
      */
     public <T> T createInstance(Object... args) throws NoConstructorExistsException {
-        Class[] argTypes = (Class[]) Arrays.stream(args).map(Object::getClass).toArray();
+        Class<?>[] argTypes = new Class<?>[args.length];
+
+        for (int i = 0, argsLength = args.length; i < argsLength; i++) {
+            Object arg = args[i];
+            Class<?> aClass = arg.getClass();
+            argTypes[i] = aClass;
+        }
         InstanceConstructor<T> constructor = constructorFor(argTypes);
         return constructor.create(args);
     }
@@ -107,18 +120,27 @@ public class ClassStructure implements Informational {
      * @return a constructor or
      * @throws NoConstructorExistsException if no constructor was found
      */
-    public <T> InstanceConstructor<T> constructorFor(Class... types) throws NoConstructorExistsException {
-        Optional<InstanceConstructor> first = constructors.stream().filter(c -> c.argsMatches(types)).findFirst();
-        if (!options.lenientConstructorSearch() || first.isPresent()) {
-            return first.orElseThrow(noConstructorFound(types));
+    public <T> InstanceConstructor<T> constructorFor(Class<?>... types) throws NoConstructorExistsException {
+        InstanceConstructor<?> first = null;
+        for (InstanceConstructor<?> c : constructors) {
+            if (c.argsMatches(types)) {
+                first = c;
+                break;
+            }
         }
+
+        if (first != null || !options.lenientConstructorSearch()) {
+            //noinspection unchecked
+            return (InstanceConstructor<T>) first;
+        }
+
         if (types.length > 0) {
             return constructorFor(Arrays.copyOf(types, types.length - 1)); //keep testing reducing arguments
         }
         throw noConstructorFound(types).get();
     }
 
-    private Supplier<NoConstructorExistsException> noConstructorFound(Class... types) {
+    private Supplier<NoConstructorExistsException> noConstructorFound(Class<?>... types) {
         return () -> new NoConstructorExistsException(String.format(
                 "No constructor found for %s with parameters %s", type, Arrays.toString(types)));
     }
