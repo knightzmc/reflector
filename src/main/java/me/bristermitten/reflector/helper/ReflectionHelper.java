@@ -6,7 +6,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
-import com.google.inject.name.Named;
 import me.bristermitten.reflector.config.Options;
 import me.bristermitten.reflector.constructor.InstanceConstructor;
 import me.bristermitten.reflector.property.info.Info;
@@ -56,7 +55,7 @@ public class ReflectionHelper {
 
     @SuppressWarnings("rawtypes")
     private final ArrayHelper<Constructor> constructorHelper = new ArrayHelper<>(Constructor.class);
-
+    private final Logger logger = Logger.getLogger("Reflector");
     @Inject
     private MethodSearcher methodSearcher;
     @Inject
@@ -126,8 +125,7 @@ public class ReflectionHelper {
         try {
             f.set(on, newValue);
         } catch (IllegalAccessException e) {
-            Logger.getLogger("Reflector").warning("Accessing field " +
-                    f.toString() + " threw IllegalAccessException, using Unsafe to set value");
+            logger.warning("Accessing field " + f.toString() + " threw IllegalAccessException, using Unsafe to set " + "value");
             //let's try unsafe!
             Unsafe unsafe = unsafeHelper.getUnsafe();
             long offset = unsafe.objectFieldOffset(f);
