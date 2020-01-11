@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 @Data
 @AllArgsConstructor
-public class DummyObject {
+public class DummyObject implements TestInterface{
     private String name;
     private int age;
     private boolean admin;
