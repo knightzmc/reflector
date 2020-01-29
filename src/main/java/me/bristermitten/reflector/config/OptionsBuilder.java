@@ -13,13 +13,13 @@ import static me.bristermitten.reflector.config.FieldAccessLevel.NONE;
  */
 public class OptionsBuilder {
     private FieldAccessLevel accessLevel = NONE;
-    private boolean scanSuperClasses = false, lenientConstructorSearch = false;
+    private boolean scanSuperClasses = false, lenientConstructorSearch = false, scanSuperInterfaceAnnotations;
     private Class<? extends AccessorMatcher> accessorMatcher = DefaultAccessorMatcher.class;
     private Class<? extends NameDecider> nameDecider = DefaultNameDecider.class;
 
     public Options build() {
-        return new Options(accessorMatcher, nameDecider, accessLevel, scanSuperClasses, lenientConstructorSearch
-        );
+        return new Options(accessorMatcher, nameDecider, accessLevel, scanSuperClasses, lenientConstructorSearch,
+                scanSuperInterfaceAnnotations);
     }
 
     /**
@@ -62,6 +62,14 @@ public class OptionsBuilder {
      */
     public OptionsBuilder lenientConstructorSearch() {
         this.lenientConstructorSearch = true;
+        return this;
+    }
+
+    /**
+     * @see Options#scanSuperInterfaceAnnotations()
+     */
+    public OptionsBuilder scanSuperInterfaceAnnotations() {
+        this.scanSuperInterfaceAnnotations = true;
         return this;
     }
 }

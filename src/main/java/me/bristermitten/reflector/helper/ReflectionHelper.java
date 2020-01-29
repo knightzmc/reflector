@@ -55,6 +55,7 @@ public class ReflectionHelper {
 
     @SuppressWarnings("rawtypes")
     private final ArrayHelper<Constructor> constructorHelper = new ArrayHelper<>(Constructor.class);
+    private final Logger logger = Logger.getLogger("Reflector");
 
     private final MethodSearcher methodSearcher;
     private final AccessorMatcher matcher;
@@ -134,7 +135,7 @@ public class ReflectionHelper {
     }
 
     private void logUnsafeUsageWarning(Field f) {
-        Logger.getLogger("Reflector").warning("Accessing field " +
+        logger.warning("Accessing field " +
                 f.toString() + " threw IllegalAccessException, using Unsafe to set value");
     }
 

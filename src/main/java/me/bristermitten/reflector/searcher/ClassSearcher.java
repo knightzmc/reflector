@@ -6,6 +6,7 @@ import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import lombok.NonNull;
 import me.bristermitten.reflector.annotation.ReflectorExpose;
 import me.bristermitten.reflector.config.Options;
 import me.bristermitten.reflector.constructor.InstanceConstructor;
@@ -15,6 +16,7 @@ import me.bristermitten.reflector.property.PropertyFactory;
 import me.bristermitten.reflector.property.info.Info;
 import me.bristermitten.reflector.property.info.InfoFactory;
 import me.bristermitten.reflector.property.structure.ClassStructure;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -86,12 +88,13 @@ public class ClassSearcher {
 
         //create a new sorted set to contain all properties
         Set<Property> properties = new TreeSet<>(Comparator.comparing(Property::getName));
+
         for (Field field : fieldSearcher.search(clazz)) {
             //workaround as guava's caches don't allow null values
-            Optional<Method> getter = getterCache.getUnchecked(field);
-            Optional<Method> setter = setterCache.getUnchecked(field);
+            Method getter = getterCache.getUnchecked(field).orElse(null);
+            Method setter = setterCache.getUnchecked(field).orElse(null);
 
-            Property property = createProperty(field, getter.orElse(null), setter.orElse(null));
+            Property property = createProperty(field, getter, setter);
             if (property != null)
                 properties.add(property);
         }
@@ -109,7 +112,7 @@ public class ClassSearcher {
      * @param setter nullable setter for the property
      * @return a Property, or null if getter and setter are null, and the field is not allowed alone
      */
-    private Property createProperty(Field field, Method getter, Method setter) {
+    private Property createProperty(@NonNull Field field, @Nullable Method getter, @Nullable Method setter) {
         String name = decider.makeName(field);
 
         if (getter != null && setter != null) {

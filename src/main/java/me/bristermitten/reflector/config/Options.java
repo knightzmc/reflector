@@ -1,18 +1,15 @@
 package me.bristermitten.reflector.config;
 
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import me.bristermitten.reflector.property.structure.ClassStructure;
 import me.bristermitten.reflector.searcher.AccessorMatcher;
 import me.bristermitten.reflector.searcher.NameDecider;
-import me.bristermitten.reflector.searcher.Searcher;
 
 /**
  * Class for configuring and storing options and implementations for Reflector.
  * All implementation options are final as they are bound and instantiated with Guice.
- * <p>
  * <p>
  * Note that any other options are not necessarily used if any custom implementations
  * are configured.
@@ -59,4 +56,13 @@ public class Options {
      * Obviously, this is dangerous as unintended functionality can be created
      */
     private boolean lenientConstructorSearch;
+
+    /**
+     * If the annotations of super interfaces should be included in the annotations of a {@link ClassStructure}.
+     *
+     * Duplicates will be overridden.
+     */
+    private boolean scanSuperInterfaceAnnotations;
+
+
 }
