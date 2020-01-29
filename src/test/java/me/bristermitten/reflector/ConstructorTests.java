@@ -1,13 +1,10 @@
 package me.bristermitten.reflector;
 
-import me.bristermitten.reflector.config.Options;
 import me.bristermitten.reflector.config.OptionsBuilder;
 import me.bristermitten.reflector.constructor.InstanceConstructor;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.lang.reflect.Constructor;
 
 import static junit.framework.TestCase.assertTrue;
 

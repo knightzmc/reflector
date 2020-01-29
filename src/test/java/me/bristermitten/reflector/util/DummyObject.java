@@ -13,4 +13,8 @@ public class DummyObject {
     @Nullable
     private DummyObject parent;
 
+
+    public DummyObject copy() {
+        return new DummyObject(name, age, admin, parent);
+    }
 }

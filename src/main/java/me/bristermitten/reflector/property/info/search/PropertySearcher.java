@@ -13,7 +13,8 @@ public final class PropertySearcher {
     private Stream<Property> properties;
 
     /**
-     * Don't call, use {@link ClassStructure#searchProperties()}
+     * Create a new Property Searcher from a ClassStructure to search
+     * This is called in {@link ClassStructure#searchProperties()}
      *
      * @param search the structure to search
      */
@@ -27,7 +28,7 @@ public final class PropertySearcher {
      * @param types the types that must be matched
      * @return this
      */
-    public final PropertySearcher byType(Class... types) {
+    public final PropertySearcher byType(Class<?>... types) {
         filter(new TypeSearchCondition(types));
         return this;
     }

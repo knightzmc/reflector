@@ -38,7 +38,8 @@ public class JsonReader {
         scanner.useDelimiter(":");
         String s = scanner.next();
         scanner.useDelimiter("");
-        scanner.next(); //remove the :
+        if (scanner.hasNext())
+            scanner.next(); //remove the :
         return s;
     }
 
@@ -86,6 +87,8 @@ public class JsonReader {
 
     public String next() {
         scanner.useDelimiter("[,|}]");
+        if (!scanner.hasNext())
+            return null;
         String next = scanner.next();
         scanner.useDelimiter("");
         scanner.next(); //remove comma

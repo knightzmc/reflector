@@ -7,7 +7,6 @@ import me.bristermitten.reflector.inject.ReflectorBindingModule;
 import me.bristermitten.reflector.util.TestEnum;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import java.lang.annotation.Annotation;
 import java.lang.annotation.Retention;
@@ -17,11 +16,10 @@ import java.lang.reflect.Method;
 import java.util.Set;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.verify;
 
 public class ReflectionHelperTests {
     private ReflectionHelper helper;
-    private Set<Class<?>> primitives = ImmutableSet.of(
+    private final Set<Class<?>> primitives = ImmutableSet.of(
             boolean.class, char.class, byte.class, short.class, int.class,
             long.class, float.class, double.class, void.class, Boolean.class, Character.class,
             Byte.class, Short.class, Integer.class, Long.class, Float.class, Double.class,
@@ -51,14 +49,6 @@ public class ReflectionHelperTests {
         }
     }
 
-    @Test
-    @SneakyThrows
-    public void testReflection_invokeMethod_invokes() {
-        TestMethodsClass tests = Mockito.spy(TestMethodsClass.class);
-        Method doNothingMethod = TestMethodsClass.class.getDeclaredMethod("doNothing");
-        helper.invokeMethod(doNothingMethod, tests);
-        verify(tests).doNothing();
-    }
 
     @Test
     @SneakyThrows

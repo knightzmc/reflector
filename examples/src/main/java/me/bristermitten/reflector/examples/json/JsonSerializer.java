@@ -68,7 +68,9 @@ public class JsonSerializer {
         JsonReader reader = new JsonReader(json);
         reader.openObject();
         while (reader.hasNext()) {
-            System.out.println("reader.nextName() = " + reader.nextName());
+            String name = reader.nextName();
+
+            System.out.println("reader.nextName() = " + name);
             System.out.println("reader = " + reader.next());
         }
 //        System.out.println("reader.nextName() = " + reader.nextName());

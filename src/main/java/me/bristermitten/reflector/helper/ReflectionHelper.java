@@ -6,7 +6,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
-import com.google.inject.name.Named;
 import me.bristermitten.reflector.config.Options;
 import me.bristermitten.reflector.constructor.InstanceConstructor;
 import me.bristermitten.reflector.property.info.Info;
@@ -57,16 +56,21 @@ public class ReflectionHelper {
     @SuppressWarnings("rawtypes")
     private final ArrayHelper<Constructor> constructorHelper = new ArrayHelper<>(Constructor.class);
 
+    private final MethodSearcher methodSearcher;
+    private final AccessorMatcher matcher;
+    private final UnsafeHelper unsafeHelper;
+    private final Provider<InfoFactory> infoFactory;
+    private final Options options;
+
     @Inject
-    private MethodSearcher methodSearcher;
-    @Inject
-    private AccessorMatcher matcher;
-    @Inject
-    private UnsafeHelper unsafeHelper;
-    @Inject
-    private Provider<InfoFactory> infoFactory;
-    @Inject
-    private Options options;
+    public ReflectionHelper(MethodSearcher methodSearcher, AccessorMatcher matcher, UnsafeHelper unsafeHelper,
+                            Provider<InfoFactory> infoFactory, Options options) {
+        this.methodSearcher = methodSearcher;
+        this.matcher = matcher;
+        this.unsafeHelper = unsafeHelper;
+        this.infoFactory = infoFactory;
+        this.options = options;
+    }
 
     /**
      * Invoke a method
@@ -81,10 +85,7 @@ public class ReflectionHelper {
     public <T> T invokeMethod(Method m, Object on, Object... args) {
         if (on == null || m == null) return null;
         try {
-            m.setAccessible(true);
-            T invoke = (T) m.invoke(on, args);
-            m.setAccessible(false);
-            return invoke;
+            return (T) m.invoke(on, args);
         } catch (IllegalAccessException | InvocationTargetException e) {
             return null;
         }
@@ -101,10 +102,7 @@ public class ReflectionHelper {
     @SuppressWarnings("unchecked")
     public <T> T getFieldValue(Field f, Object on) {
         try {
-            f.setAccessible(true);
-            T t = (T) f.get(on);
-            f.setAccessible(false);
-            return t;
+            return (T) f.get(on);
         } catch (IllegalAccessException e) {
             return null;
         }
@@ -121,21 +119,23 @@ public class ReflectionHelper {
      * @return the previous value of the field
      */
     public <T> T setFieldValue(Field f, Object on, T newValue) {
-        f.setAccessible(true);
         T previous = getFieldValue(f, on);
         try {
             f.set(on, newValue);
         } catch (IllegalAccessException e) {
-            Logger.getLogger("Reflector").warning("Accessing field " +
-                    f.toString() + " threw IllegalAccessException, using Unsafe to set value");
+            logUnsafeUsageWarning(f);
+
             //let's try unsafe!
             Unsafe unsafe = unsafeHelper.getUnsafe();
             long offset = unsafe.objectFieldOffset(f);
             unsafe.putObject(on, offset, newValue);
-        } finally {
-            f.setAccessible(false);
         }
         return previous;
+    }
+
+    private void logUnsafeUsageWarning(Field f) {
+        Logger.getLogger("Reflector").warning("Accessing field " +
+                f.toString() + " threw IllegalAccessException, using Unsafe to set value");
     }
 
     /**

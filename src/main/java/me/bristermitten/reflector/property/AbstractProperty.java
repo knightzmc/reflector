@@ -109,7 +109,7 @@ public abstract class AbstractProperty implements Property {
     }
 
     @Override
-    public boolean isSubTypeOf(Class type) {
+    public boolean isSubTypeOf(Class<?> type) {
         return type.isAssignableFrom(getType());
     }
 

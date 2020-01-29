@@ -27,6 +27,8 @@ public class SetterSetter implements Setter {
         this.setter = setter;
         this.setOn = setOn;
         this.helper = helper;
+
+        setter.setAccessible(true);
     }
 
     @Override
